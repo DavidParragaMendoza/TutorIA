@@ -1,0 +1,65 @@
+{
+  "marca": {
+    "nombreBase": "Tutor",
+    "nombreDestacado": "IA",
+    "hanzi": "/ 华语",
+    "subtitulo": "Ruta Pedagógica"
+  },
+  "estudiante": {
+    "nombreCompleto": "Carlos Bernabé",
+    "nombreCorto": "Carlos B.",
+    "iniciales": "CB",
+    "rol": "Estudiante",
+    "estado": "En progreso",
+    "nivelHsk": "HSK1",
+    "paralelo": "A1",
+    "porcentajeProgreso": 25
+  },
+  "encabezado": {
+    "etiqueta": "Secuencia de Aprendizaje Guiada",
+    "titulo": "Tu Ruta Individualizada",
+    "descripcion": "Avanza con atención y serenidad. Cada módulo se activa conforme tu docente evalúa tu progreso."
+  },
+  "nodos": [
+    {
+      "id": "diagnostico-inicial",
+      "estado": "completado",
+      "porcentaje": 100,
+      "etiqueta": "Completado: Diagnóstico Inicial",
+      "icono": "check"
+    },
+    {
+      "id": "modulo-1",
+      "estado": "activo",
+      "orden": 1,
+      "titulo": "Módulo 1: Saludos y Expresiones de Cortesía",
+      "hanzi": "你好, 谢谢",
+      "descripcion": "Práctica de vocabulario HSK1 (Chat con Opciones Múltiples)",
+      "duracion": "~12 min",
+      "modalidad": "Chat Estructurado RAG",
+      "prioridad": "Prioritario",
+      "etiquetaNodo": "En Curso",
+      "nota": "Evaluación formativa directa · No computa tiempo límite",
+      "textoBoton": "[ Iniciar Práctica ]"
+    },
+    {
+      "id": "modulo-2",
+      "estado": "bloqueado",
+      "titulo": "Módulo 2: Números y Horarios",
+      "descripcionEstado": "Bloqueado — Esperando habilitación del docente"
+    },
+    {
+      "id": "modulo-3",
+      "estado": "bloqueado",
+      "titulo": "Módulo 3: Familia y Profesiones",
+      "descripcionEstado": "Bloqueado — Esperando habilitación del docente"
+    }
+  ],
+  "textos": {
+    "nodoActivo": "Nodo Activo",
+    "tareaProfesor": "Tarea Asignada por tu Profesor:",
+    "cerrarSesion": "Cerrar Sesión",
+    "rutaActiva": "[ Mi Ruta Activa ]",
+    "perfil": "[ Mi Perfil ]"
+  }
+}

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KUMA HuáYu · Inicio de Sesión</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;family=Noto+Serif+SC:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#31302b",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#1f4e79",
+            "surface": "#fdf9f0",
+            "on-surface": "#1c1c16",
+            "background": "#fdf9f0",
+            "secondary-fixed": "#ffdad8",
+            "secondary": "#bb0027",
+            "surface-bright": "#fdf9f0",
+            "surface-tint": "#35618d",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#e6e2d9",
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#a6bedd",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f7f3ea",
+            "outline-variant": "#c2c7d0",
+            "primary": "#00375e",
+            "surface-container-high": "#ece8df",
+            "on-primary-fixed": "#001d35",
+            "inverse-primary": "#a0cafc",
+            "on-tertiary-fixed-variant": "#314863",
+            "tertiary-fixed-dim": "#b0c9e8",
+            "on-secondary-fixed": "#410007",
+            "surface-container": "#f1eee5",
+            "on-secondary-container": "#fffbff",
+            "on-primary-fixed-variant": "#184974",
+            "tertiary-fixed": "#d1e4ff",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "secondary-fixed-dim": "#ffb3b1",
+            "on-secondary-fixed-variant": "#92001c",
+            "primary-fixed": "#d1e4ff",
+            "tertiary": "#1e3650",
+            "on-tertiary-fixed": "#011d35",
+            "on-surface-variant": "#42474f",
+            "inverse-on-surface": "#f4f0e7",
+            "surface-dim": "#dddad1",
+            "error": "#ba1a1a",
+            "tertiary-container": "#364d68",
+            "secondary-container": "#e0283c",
+            "outline": "#72777f",
+            "primary-fixed-dim": "#a0cafc",
+            "on-background": "#1c1c16",
+            "on-primary-container": "#95bff1",
+            "surface-container-highest": "#e6e2d9"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "display": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["JetBrains Mono", "monospace"],
+            "hanzi-serif": ["Noto Serif SC", "serif"],
+            "hanzi": ["Noto Sans SC", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined[data-weight="fill"] {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Subtle watermark calligraphy texture */
+    .shanshui-watermark {
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+<meta content="web_standard" name="shell-type"/></head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col justify-between relative selection:bg-secondary-fixed selection:text-on-secondary-fixed overflow-x-hidden">
+<!-- ATMOSPHERIC BACKGROUND WATERMARK: SHANSHUI / CHINESE CALLIGRAPHIC ESSENCE -->
+<div class="fixed inset-0 shanshui-watermark overflow-hidden flex items-center justify-center opacity-100 z-0 pointer-events-none">
+<!-- Traditional Shanshui Landscape / Brush Calligraphy Watermark -->
+<svg class="absolute w-[120vw] md:w-[95vw] max-w-none text-primary-container opacity-[0.045] transform -translate-y-6" fill="none" viewbox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+<!-- Mountain silhouettes and ink-wash gradations -->
+<path d="M-50 780 C180 620, 290 690, 480 610 C650 540, 780 640, 960 560 C1150 470, 1260 580, 1450 510 L1450 950 L-50 950 Z" fill="currentColor"></path>
+<path d="M120 620 C260 480, 390 520, 540 430 C720 330, 890 440, 1080 360 C1220 300, 1340 380, 1480 320 L1480 900 L120 900 Z" fill="currentColor" opacity="0.6"></path>
+<path d="M280 470 C410 320, 560 360, 690 280 C840 190, 980 260, 1140 210 C1240 180, 1320 220, 1420 180 L1420 850 L280 850 Z" fill="currentColor" opacity="0.35"></path>
+<!-- Classical Seal Stamp Silhouette in background -->
+<text fill="currentColor" font-family="'Noto Serif SC', serif" font-size="110" font-weight="700" opacity="0.5" x="110" y="320">博学笃行</text>
+<text fill="currentColor" font-family="'Noto Serif SC', serif" font-size="44" font-weight="400" opacity="0.35" x="110" y="440">格物致知 · 华语深研</text>
+<!-- Stylized ink-mist mist ripples -->
+<path d="M50 720 Q 300 690, 600 730 T 1150 710 T 1450 740" fill="none" opacity="0.25" stroke="currentColor" stroke-dasharray="12 18" stroke-width="1.5"></path>
+<path d="M150 760 Q 400 740, 750 770 T 1300 750" fill="none" opacity="0.2" stroke="currentColor" stroke-dasharray="8 14" stroke-width="1"></path>
+</svg>
+</div>
+<!-- TOP APP BAR / BRAND HEADER -->
+<header class="relative z-10 w-full px-6 py-5 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
+<!-- Brand Identity: Yìnní Seal + Product Wordmark -->
+<div class="flex items-center gap-3 group"><div class="w-10 h-10 bg-secondary rounded-[3px] shadow-sm flex items-center justify-center p-1 border border-secondary-container transition-transform duration-200 group-hover:scale-105" title="TutorIA · 学"><span class="font-hanzi font-bold text-surface-container-lowest text-lg leading-none select-none">学</span></div><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline text-lg font-bold tracking-tight text-[#1f4e79]">Tutor<span class="text-secondary">IA</span></span><span class="text-xs px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label border border-outline-variant/40">AI</span></div><span class="text-[11px] font-hanzi font-medium tracking-wide text-on-surface-variant">Plataforma Inteligente de Mandarín · 智能导师</span></div></div>
+<!-- Right Utility Navigation Links (Subtle & Non-Intrusive) -->
+<div class="flex items-center gap-4 text-xs font-headline">
+<a class="hidden sm:inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors py-1.5 px-3 rounded-lg hover:bg-surface-container-high/60" href="#">
+<span class="material-symbols-outlined text-[17px]">language</span>
+<span class="">Español / 中文</span>
+</a>
+<a class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors py-1.5 px-3 rounded-lg hover:bg-surface-container-high/60" href="#">
+<span class="material-symbols-outlined text-[17px]">help_outline</span>
+<span class="">Ayuda</span>
+</a>
+</div>
+</header>
+<!-- MAIN CANVAS: CENTERED AUTHENTICATION CARD -->
+<main class="relative z-10 flex-grow flex items-center justify-center px-4 py-8 sm:py-12"><div class="flex flex-col w-full max-w-xl mx-auto px-4 py-2 sm:py-6">
+<!-- Subtle Tianzige & Calligraphic Atmospheric Card Wrapper -->
+<div class="relative w-full bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden">
+<!-- Decorative Ceramic Seal Bar (Top Accent) -->
+<div class="h-1.5 w-full bg-gradient-to-r from-primary via-secondary to-primary-container"></div>
+<!-- Background Tianzige Watermark (Grid Lines) -->
+<div aria-hidden="true" class="absolute inset-0 pointer-events-none opacity-[0.035] overflow-hidden">
+<svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="64" id="tianzige-pattern" patternunits="userSpaceOnUse" width="64">
+<line stroke="currentColor" stroke-dasharray="2 3" stroke-width="1" x1="0" x2="64" y1="32" y2="32"></line>
+<line stroke="currentColor" stroke-dasharray="2 3" stroke-width="1" x1="32" x2="32" y1="0" y2="64"></line>
+<rect fill="none" height="64" stroke="currentColor" stroke-width="0.75" width="64" x="0" y="0"></rect>
+</pattern>
+</defs>
+<rect class="text-primary" fill="url(#tianzige-pattern)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="relative z-10 p-6 sm:p-10 flex flex-col">
+<!-- Top Meta Badge & Security Index -->
+<div class="flex items-center justify-between mb-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-label font-medium tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span>SEGURIDAD INSTITUCIONAL · 重置密码</span>
+</div>
+<span class="font-label text-[11px] text-on-surface-variant font-medium tracking-tight">KUMA-AUTH // v4.2</span>
+</div>
+<!-- Header Title Section -->
+<div class="space-y-2 mb-8">
+<div class="flex items-baseline gap-3">
+<h1 class="font-headline text-2xl sm:text-3xl font-bold tracking-tight text-primary">
+            Recuperar Credenciales
+          </h1>
+<span class="font-hanzi text-lg font-medium text-on-surface-variant/70 select-none">找回凭证</span>
+</div>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+          Ingresa tu correo institucional registrado para enviarte un enlace de validación y un token temporal de acceso seguro cifrado por el sistema académico.
+        </p>
+</div>
+<!-- Main Form -->
+<form class="space-y-6" id="recoveryForm" onsubmit="event.preventDefault(); handleSendToken();">
+<!-- Input Field Container -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="block font-headline text-xs font-semibold text-primary uppercase tracking-wider" for="institutionalEmail">
+              Correo Institucional <span class="text-secondary">*</span>
+</label>
+<span class="font-label text-[11px] text-on-surface-variant">HuáYu Cloud ID</span>
+</div>
+<div class="relative rounded-lg shadow-sm bg-surface-container-low transition-all duration-200 focus-within:bg-surface-container-lowest focus-within:shadow-md">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3.5 bg-transparent text-sm font-body text-on-surface placeholder:text-outline/70 focus:outline-none focus:ring-2 focus:ring-primary/20 rounded-lg transition-colors border-0" id="institutionalEmail" name="institutionalEmail" placeholder="ej. carlos@huayu.edu o usuario@academico.edu" required="" type="email"/>
+</div>
+<!-- Micro-Instruction & Token Lifespan Info -->
+<div class="flex items-start gap-2 pt-1.5 text-xs text-on-surface-variant/90">
+<span class="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">schedule</span>
+<p class="leading-relaxed">
+              Se enviará un código numérico temporal válido por <span class="font-label font-medium text-primary">15 minutos</span> a tu bandeja institucional oficial.
+            </p>
+</div>
+</div>
+<!-- Success Notification Banner (Initially Hidden) -->
+<div class="hidden rounded-lg p-4 bg-surface-container-high transition-all" id="feedbackBanner">
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">mark_email_read</span>
+</div>
+<div class="flex flex-col text-xs space-y-1">
+<span class="font-headline font-semibold text-primary">Token Despachado con Éxito</span>
+<span class="font-body text-on-surface-variant">Revisa tu bandeja de entrada o carpeta de correos prioritarios para continuar el proceso.</span>
+</div>
+</div>
+</div>
+<!-- Submit Button in Vermilion / Rojo Sello -->
+<div class="pt-2">
+<button class="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-lg bg-secondary hover:bg-secondary-container active:scale-[0.99] text-on-secondary font-headline font-semibold text-sm tracking-wide shadow-md hover:shadow-lg transition-all duration-200 group" id="submitBtn" type="submit">
+<span id="btnText">Enviar Token Temporal</span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-200 group-hover:translate-x-1" id="btnIcon">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Educational Micro-Module: Academic Protocol Tip -->
+<div class="mt-8 pt-6 border-t-0 bg-surface-container-low rounded-lg p-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-md bg-primary-container text-on-primary-container flex items-center justify-center font-hanzi font-bold text-sm shrink-0">
+          印
+        </div>
+<div class="flex flex-col text-xs leading-tight">
+<span class="font-headline font-semibold text-primary">Validación Criptográfica Académica</span>
+<span class="font-body text-on-surface-variant text-[11px] mt-0.5">Protocolo estandarizado para alumnos del ciclo SRS y docentes certificados.</span>
+</div>
+</div>
+<!-- Navigation & Assistance Links -->
+<div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-body pt-2">
+<a class="inline-flex items-center gap-1.5 font-headline font-medium text-primary hover:text-primary-container transition-colors py-1 group" href="#">
+<span class="material-symbols-outlined text-[16px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span>Volver al inicio de sesión</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-center sm:text-right" href="#">
+          ¿No recuerdas tu correo? <span class="font-semibold underline underline-offset-4 decoration-outline-variant">Soporte Académico</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Discreet SRS Learning Strip Under Card -->
+<div class="mt-6 flex items-center justify-center gap-6 text-[11px] text-on-surface-variant font-label opacity-75">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+<span>SSL 256-BIT ENCRYPTION</span>
+</div>
+<span class="text-outline-variant">/</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary">school</span>
+<span>PORTAL ACADÉMICO KUMA</span>
+</div>
+</div>
+</div>
+<script>
+  function handleSendToken() {
+    const emailInput = document.getElementById('institutionalEmail');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const feedback = document.getElementById('feedbackBanner');
+
+    if (!emailInput.value || !emailInput.checkValidity()) {
+      emailInput.focus();
+      return;
+    }
+
+    // Interactive button loading state
+    btnText.textContent = "Transmitiendo solicitud...";
+    btnIcon.textContent = "hourglass_top";
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-90', 'cursor-not-allowed');
+
+    setTimeout(() => {
+      btnText.textContent = "Token Enviado Correctamente";
+      btnIcon.textContent = "done";
+      feedback.classList.remove('hidden');
+      
+      // Gentle confirmation state
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+        btnText.textContent = "Reenviar Token";
+        btnIcon.textContent = "refresh";
+      }, 4000);
+    }, 1000);
+  }
+</script></main>
+<!-- MINIMAL INSTITUTIONAL FOOTER -->
+<footer class="relative z-10 w-full py-6 px-6 border-t border-outline-variant/30 text-center text-xs font-body text-on-surface-variant">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px]">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="font-medium">© 2024 KUMA HuáYu (学语文中)</span>
+<span class="text-outline-variant">·</span>
+<span class="">Sistema Académico</span>
+</div>
+<div class="flex items-center gap-5">
+<a class="hover:text-primary transition-colors" href="#">Privacidad</a>
+<a class="hover:text-primary transition-colors" href="#">Términos Institucionales</a>
+<a class="hover:text-primary transition-colors" href="#">Contacto de Soporte</a>
+</div>
+</div>
+</footer>
+<!-- Light Vanilla Script for Password Toggle and Refined Feedback -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const togglePasswordBtn = document.getElementById('togglePassword');
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+
+      if (togglePasswordBtn && passwordInput && eyeIcon) {
+        togglePasswordBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.type === 'password';
+          passwordInput.type = isPassword ? 'text' : 'password';
+          eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        });
+      }
+    });
+  </script>
+</body></html>

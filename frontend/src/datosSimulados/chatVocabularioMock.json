@@ -1,0 +1,126 @@
+{
+  "cabecera": {
+    "tituloModulo": "Módulo 1: Saludos y Expresiones de Cortesía",
+    "ejercicioActual": 2,
+    "ejercicioTotal": 5,
+    "etiquetaNivel": "HSK 1 · Aprendizaje Reflexivo"
+  },
+  "historial": [
+    {
+      "tipo": "superado",
+      "titulo": "Ejercicio 1 superado:",
+      "hanzi": "你好",
+      "pinyin": "nǐhǎo",
+      "significado": "«Hola»",
+      "insignia": "RAG Asimilado"
+    }
+  ],
+  "tutor": {
+    "nombre": "TutorIA",
+    "insignia": "Tutor Pedagógico RAG",
+    "descripcion": "Atención socrática personalizada"
+  },
+  "preguntas": [
+    {
+      "id": "pregunta-2",
+      "contexto": "Frecuencia Alta · HSK 1",
+      "hanzi": "谢谢",
+      "pinyin": "xièxie",
+      "tono": "Tono 4 + Neutro",
+      "audioTexto": "谢谢",
+      "pregunta": "¿Cuál es el significado correcto de esta expresión?",
+      "instruccion": "Examina los radicales y selecciona la correspondencia adecuada.",
+      "opciones": [
+        { "id": "A", "texto": "De nada", "correcta": false },
+        { "id": "B", "texto": "Gracias", "correcta": true },
+        { "id": "C", "texto": "Adiós", "correcta": false },
+        { "id": "D", "texto": "Hola", "correcta": false }
+      ],
+      "retroalimentacion": {
+        "titulo": "¡Correcto! 谢谢 (xièxie) significa «Gracias».",
+        "subtitulo": "Asociación semántica verificada con éxito",
+        "etiquetaExplicacion": "Explicación RAG · Composición de Radicales",
+        "explicacion": "谢谢 se compone del radical del habla 讠 (palabra/comunicación respetuosa) y el componente fonético-semántico 射 (emitir o lanzar). Se emplea en todo el mundo hispanohablante y sinoparlante tanto para formalidad cortés como en intercambios de la vida cotidiana."
+      }
+    },
+    {
+      "id": "pregunta-3",
+      "contexto": "Uso Cotidiano · HSK 1",
+      "hanzi": "你好",
+      "pinyin": "nǐhǎo",
+      "tono": "Tono 3 + Tono 3",
+      "audioTexto": "你好",
+      "pregunta": "¿Cuál es el significado correcto de esta expresión?",
+      "instruccion": "Observa los caracteres y elige la equivalencia más precisa.",
+      "opciones": [
+        { "id": "A", "texto": "Gracias", "correcta": false },
+        { "id": "B", "texto": "Hola", "correcta": true },
+        { "id": "C", "texto": "Adiós", "correcta": false },
+        { "id": "D", "texto": "Buenos días", "correcta": false }
+      ],
+      "retroalimentacion": {
+        "titulo": "¡Correcto! 你好 (nǐhǎo) significa «Hola».",
+        "subtitulo": "Asociación semántica verificada con éxito",
+        "etiquetaExplicacion": "Explicación RAG · Composición de Radicales",
+        "explicacion": "你好 combina 你 (tú) y 好 (bien/bueno). Es el saludo cotidiano más extendido del chino mandarín y se usa tanto en contextos formales como informales."
+      }
+    },
+    {
+      "id": "pregunta-4",
+      "contexto": "Despedidas · HSK 1",
+      "hanzi": "再见",
+      "pinyin": "zàijiàn",
+      "tono": "Tono 4 + Tono 4",
+      "audioTexto": "再见",
+      "pregunta": "¿Cuál es el significado correcto de esta expresión?",
+      "instruccion": "Relaciona los caracteres con su uso comunicativo habitual.",
+      "opciones": [
+        { "id": "A", "texto": "Hola", "correcta": false },
+        { "id": "B", "texto": "Gracias", "correcta": false },
+        { "id": "C", "texto": "Adiós", "correcta": true },
+        { "id": "D", "texto": "Por favor", "correcta": false }
+      ],
+      "retroalimentacion": {
+        "titulo": "¡Correcto! 再见 (zàijiàn) significa «Adiós».",
+        "subtitulo": "Asociación semántica verificada con éxito",
+        "etiquetaExplicacion": "Explicación RAG · Composición de Radicales",
+        "explicacion": "再见 está formado por 再 (otra vez) y 见 (ver). Literalmente significa «nos vemos de nuevo» y equivale a «adiós» o «hasta luego»."
+      }
+    },
+    {
+      "id": "pregunta-5",
+      "contexto": "Cortesía · HSK 1",
+      "hanzi": "请",
+      "pinyin": "qǐng",
+      "tono": "Tono 3",
+      "audioTexto": "请",
+      "pregunta": "¿Cuál es el significado correcto de esta expresión?",
+      "instruccion": "Identifica la fórmula de cortesía empleada en peticiones.",
+      "opciones": [
+        { "id": "A", "texto": "Por favor", "correcta": true },
+        { "id": "B", "texto": "Gracias", "correcta": false },
+        { "id": "C", "texto": "Adiós", "correcta": false },
+        { "id": "D", "texto": "De nada", "correcta": false }
+      ],
+      "retroalimentacion": {
+        "titulo": "¡Correcto! 请 (qǐng) significa «Por favor».",
+        "subtitulo": "Asociación semántica verificada con éxito",
+        "etiquetaExplicacion": "Explicación RAG · Composición de Radicales",
+        "explicacion": "请 incorpora el radical del habla 讠 y el componente 青. Se utiliza para formular peticiones corteses, equivalente a «por favor» según el contexto."
+      }
+    }
+  ],
+  "textos": {
+    "volverRuta": "Volver a Mi Ruta",
+    "cerrarSesion": "Cerrar Sesión",
+    "modoGuiado": "Modo guiado: Selecciona una de las 4 opciones inferiores",
+    "tecladoDesactivado": "Teclado desactivado",
+    "escucharAudio": "Escuchar audio nativo",
+    "pronunciacionNativa": "Pronunciación nativa",
+    "siguientePregunta": "Siguiente Pregunta",
+    "pieMarca": "TutorIA HSK1",
+    "pieTexto": "Sistema formativo guiado sin límite de tiempo ni penalizaciones",
+    "pieEditorial": "TutorIA Studio",
+    "pieEstado": "SRS Interval Repetition Active"
+  }
+}

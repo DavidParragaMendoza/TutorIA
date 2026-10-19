@@ -1,0 +1,178 @@
+{
+  "marca": {
+    "nombreBase": "Tutor",
+    "nombreDestacado": "IA",
+    "hanzi": "华语",
+    "etiquetaRol": "Admin Portal"
+  },
+  "sistema": {
+    "etiquetaVersion": "TUTORIA-SYS-v2.4",
+    "cluster": "CLUSTER-ECU-01"
+  },
+  "administrador": {
+    "nombreCompleto": "Administrador TutorIA",
+    "correo": "admin@tutoria.edu",
+    "iniciales": "AD",
+    "rol": "Administrador"
+  },
+  "encabezado": {
+    "titulo": "Panel de Control & Consola Técnica",
+    "subtitulo": "Gobernanza pedagógica, directorio de usuarios y orquestación de inferencia local para tutoría en mandarín."
+  },
+  "pestanas": [
+    { "clave": "usuarios", "etiqueta": "Gestión de Usuarios", "icono": "group", "insignia": "HU-23" },
+    { "clave": "ia", "etiqueta": "Configuración IA", "icono": "neurology", "insignia": "HU-24" }
+  ],
+  "directorio": {
+    "titulo": "Directorio Académico",
+    "estado": "Directorio Sincronizado — MySQL Local",
+    "descripcion": "Control centralizado de credenciales, roles pedagógicos y mitigación de acceso docente y estudiantil.",
+    "botonNuevo": "Nuevo Usuario",
+    "etiquetaRegistros": "Registros:"
+  },
+  "filtrosRol": [
+    { "valor": "todos", "etiqueta": "Todos los roles (Estudiante, Docente, Admin)" },
+    { "valor": "Estudiante", "etiqueta": "Estudiantes" },
+    { "valor": "Docente", "etiqueta": "Docentes" },
+    { "valor": "Administrador", "etiqueta": "Administradores" }
+  ],
+  "usuarios": [
+    {
+      "id": "USR-8841-ES",
+      "iniciales": "CB",
+      "nombreCompleto": "Carlos Bernabé",
+      "cedula": "0987654321",
+      "correo": "carlos@tutoria.edu",
+      "rol": "Estudiante",
+      "estado": "Activo",
+      "tonoAvatar": "porcelain",
+      "destacado": false,
+      "acciones": [
+        { "clave": "editar", "etiqueta": "Editar", "icono": "edit", "tono": "porcelain" },
+        { "clave": "bloquear", "etiqueta": "Bloquear", "icono": "block", "tono": "secondary" }
+      ]
+    },
+    {
+      "id": "USR-4102-DOC",
+      "iniciales": "DU",
+      "nombreCompleto": "David Unaucho",
+      "cedula": "0912345678",
+      "correo": "aparran@tutoria.edu",
+      "rol": "Docente",
+      "estado": "Activo",
+      "tonoAvatar": "emerald",
+      "destacado": false,
+      "acciones": [
+        { "clave": "editar", "etiqueta": "Editar", "icono": "edit", "tono": "porcelain" },
+        { "clave": "bloquear", "etiqueta": "Bloquear", "icono": "block", "tono": "secondary" }
+      ]
+    },
+    {
+      "id": "ROOT-SEC-001",
+      "iniciales": "AD",
+      "nombreCompleto": "Administrador TutorIA",
+      "cedula": "0900000000",
+      "correo": "admin@tutoria.edu",
+      "rol": "Administrador",
+      "estado": "Bloqueado",
+      "tonoAvatar": "cinabrio",
+      "destacado": true,
+      "acciones": [
+        { "clave": "desbloquear", "etiqueta": "Desbloquear", "icono": "lock_open", "tono": "emerald" },
+        { "clave": "historial", "etiqueta": "Historial", "icono": "history", "tono": "neutral" }
+      ]
+    }
+  ],
+  "paginacion": {
+    "mostrados": 3,
+    "total": 3,
+    "mensaje": "cuentas indexadas",
+    "copiaSeguridad": "Copia de seguridad local: Hoy 04:00 AM"
+  },
+  "parametrosIa": {
+    "hero": {
+      "etiqueta": "Inferencia de Borde Activa",
+      "titulo": "Motor Local RAG & Fonética de Alta Fidelidad",
+      "detalle": "Latencia RAG 42ms · GPU Local Activa (NVIDIA RTX 4090 / CUDA 12.4) · Whisper Large-v3 montado en memoria.",
+      "estadoEtiqueta": "Estado del Servicio",
+      "estadoValor": "Conexión Estable (200 OK)"
+    },
+    "motorRag": {
+      "titulo": "Motor RAG (AnythingLLM / Ollama)",
+      "descripcion": "Recuperación semántica aumentada para gramática HSK 1-6",
+      "insignia": "LLM PORT",
+      "icono": "database",
+      "campos": [
+        {
+          "clave": "endpoint",
+          "etiqueta": "URL del Endpoint Local",
+          "valor": "http://127.0.0.1:3001/api/v1/rag",
+          "icono": "link",
+          "ayuda": "Ruta interna del backend local para la vectorización de lecciones."
+        },
+        {
+          "clave": "timeout",
+          "etiqueta": "Timeout de Latencia (Segundos)",
+          "valor": "3.0 segundos",
+          "icono": "timer",
+          "ayuda": "Límite antes del fallback pedagógico con respuestas fijas."
+        }
+      ]
+    },
+    "motorAudio": {
+      "titulo": "Motor de Audio Fonético (Whisper Large-v3)",
+      "descripcion": "Evaluación de tonos (声调), pinyin y prosodia de estudiantes",
+      "insignia": "ASR MODEL",
+      "icono": "record_voice_over",
+      "etiquetaToken": "API Key / Token de Autenticación",
+      "token": "sk-whisp-tutoria-9840293847291039485",
+      "ayudaToken": "Clave segura para el pipeline gRPC del servicio de transcripción de audio.",
+      "telemetria": [
+        { "etiqueta": "Tasa de Inferencia", "valor": "0.18s / fonema", "tono": "porcelain" },
+        { "etiqueta": "Precisión Tonal", "valor": "99.4% HSK 1-3", "tono": "secondary" }
+      ]
+    },
+    "ultimaActualizacion": "Última actualización de pesos: 2026-10-12 10:14:02 UTC",
+    "botonRestablecer": "Restablecer Valores",
+    "botonGuardar": "Guardar Cambios"
+  },
+  "modalUsuario": {
+    "titulo": "Nuevo Usuario",
+    "subtitulo": "Crea una credencial institucional en el directorio académico",
+    "etiquetaNombres": "Nombres y Apellidos",
+    "marcadorNombres": "Ej. Juan Pérez",
+    "etiquetaCedula": "Cédula de Identidad",
+    "ayudaCedula": "Solo números (10 dígitos)",
+    "marcadorCedula": "0000000000",
+    "etiquetaCorreo": "Correo Institucional",
+    "marcadorCorreo": "nombre@tutoria.edu",
+    "etiquetaRol": "Rol de Acceso",
+    "rolesDisponibles": [
+      { "valor": "Estudiante", "etiqueta": "Estudiante (Acceso a lecciones, SRS y tareas)" },
+      { "valor": "Docente", "etiqueta": "Docente (Gestión pedagógica y calificaciones)" },
+      { "valor": "Administrador", "etiqueta": "Admin (Control total del sistema y analíticas)" }
+    ],
+    "errorDuplicado": "Esta cuenta ya existe en el directorio local",
+    "botonCancelar": "Cancelar",
+    "botonGuardar": "Guardar",
+    "camposIniciales": {
+      "nombres": "",
+      "cedula": "",
+      "correo": "",
+      "rol": "Estudiante"
+    }
+  },
+  "textos": {
+    "menuPrincipal": "Menú Principal",
+    "cerrarSesion": "Cerrar Sesión",
+    "buscarPlaceholder": "Buscar por nombre, cédula o correo institucional...",
+    "columnaNombre": "Nombre & Apellido",
+    "columnaCedula": "Cédula",
+    "columnaCorreo": "Correo Institucional",
+    "columnaRol": "Rol Académico",
+    "columnaEstado": "Estado",
+    "columnaAcciones": "Acciones",
+    "pieMarca": "TutorIA Studio",
+    "pieEstado": "Consola de Administración Centralizada"
+  }
+}

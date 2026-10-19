@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+@theme {
+  --color-inverse-surface: #31302b;
+  --color-surface-container-lowest: #ffffff;
+  --color-primary-container: #1f4e79;
+  --color-surface: #fdf9f0;
+  --color-on-surface: #1c1c16;
+  --color-background: #fdf9f0;
+  --color-secondary-fixed: #ffdad8;
+  --color-secondary: #bb0027;
+  --color-surface-bright: #fdf9f0;
+  --color-surface-tint: #35618d;
+  --color-on-tertiary: #ffffff;
+  --color-on-secondary: #ffffff;
+  --color-surface-variant: #e6e2d9;
+  --color-on-error: #ffffff;
+  --color-on-tertiary-container: #a6bedd;
+  --color-on-primary: #ffffff;
+  --color-surface-container-low: #f7f3ea;
+  --color-outline-variant: #c2c7d0;
+  --color-primary: #00375e;
+  --color-surface-container-high: #ece8df;
+  --color-on-primary-fixed: #001d35;
+  --color-inverse-primary: #a0cafc;
+  --color-on-tertiary-fixed-variant: #314863;
+  --color-tertiary-fixed-dim: #b0c9e8;
+  --color-on-secondary-fixed: #410007;
+  --color-surface-container: #f1eee5;
+  --color-on-secondary-container: #fffbff;
+  --color-on-primary-fixed-variant: #184974;
+  --color-tertiary-fixed: #d1e4ff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-secondary-fixed-dim: #ffb3b1;
+  --color-on-secondary-fixed-variant: #92001c;
+  --color-primary-fixed: #d1e4ff;
+  --color-tertiary: #1e3650;
+  --color-on-tertiary-fixed: #011d35;
+  --color-on-surface-variant: #42474f;
+  --color-inverse-on-surface: #f4f0e7;
+  --color-surface-dim: #dddad1;
+  --color-error: #ba1a1a;
+  --color-tertiary-container: #364d68;
+  --color-secondary-container: #e0283c;
+  --color-outline: #72777f;
+  --color-primary-fixed-dim: #a0cafc;
+  --color-on-background: #1c1c16;
+  --color-on-primary-container: #95bff1;
+  --color-surface-container-highest: #e6e2d9;
+
+  --color-brand-porcelain: #1f4e79;
+  --color-brand-cinabrio: #c8102e;
+  --color-brand-bg: #f5f1e8;
+  --color-brand-card: #faf8f5;
+  --color-brand-border: #e2ddd3;
+  --color-brand-border-light: #d8e2ea;
+  --color-brand-emerald: #2e7d32;
+  --color-brand-emerald-bg: #e8f5e9;
+
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "JetBrains Mono", monospace;
+  --font-hanzi-serif: "Noto Serif SC", serif;
+  --font-hanzi: "Noto Sans SC", sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.material-symbols-outlined[data-weight="fill"] {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.shanshui-watermark {
+  pointer-events: none;
+  user-select: none;
+}
+
+.oriental-watermark {
+  position: fixed;
+  right: 5%;
+  top: 15%;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32rem;
+  line-height: 1;
+  font-weight: 900;
+  color: rgba(31, 78, 121, 0.025);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.oriental-watermark-left {
+  position: fixed;
+  left: 3%;
+  bottom: 8%;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 24rem;
+  line-height: 1;
+  font-weight: 900;
+  color: rgba(200, 16, 46, 0.02);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.node-pulse {
+  animation: gentle-pulse 2.8s infinite ease-in-out;
+}
+
+@keyframes gentle-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(200, 16, 46, 0.35), 0 10px 25px -5px rgba(31, 78, 121, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(200, 16, 46, 0), 0 16px 30px -5px rgba(31, 78, 121, 0.3);
+  }
+}
+

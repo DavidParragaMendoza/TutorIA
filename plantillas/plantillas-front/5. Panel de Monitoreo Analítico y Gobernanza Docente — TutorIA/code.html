@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Monitoreo Analítico y Gobernanza Docente — TutorIA</title>
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Serif SC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              porcelain: '#1F4E79',     // Azul Porcelana característico
+              cinabrio: '#C8102E',      // Rojo Sello Bermellón
+              bg: '#F5F1E8',            // Blanco Arroz / Pergamino tradicional
+              card: '#FAF8F5',          // Superficie pulida
+              border: '#E2DDD3',        // Líneas divisoras sutiles
+              green: '#2E7D32',         // Éxito pedagógico
+              amber: '#D97706',         // Atención requerida
+              alertRed: '#DC2626'       // Riesgo crítico
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Noto Serif SC"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F5F1E8;
+    }
+    .font-hanzi {
+      font-family: 'Noto Serif SC', serif;
+    }
+    .watermark-kanji {
+      position: fixed;
+      right: -2rem;
+      bottom: -3rem;
+      font-size: 30rem;
+      line-height: 1;
+      font-weight: 900;
+      color: rgba(31, 78, 121, 0.025);
+      user-select: none;
+      pointer-events: none;
+      z-index: 0;
+      font-family: 'Noto Serif SC', serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Estilización sutil del scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F1E8;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D8D2C4;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1F4E79;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 antialiased flex flex-col relative selection:bg-brand-porcelain/15 selection:text-brand-porcelain pb-12">
+
+  <!-- Watermark Ornamental Tradicional -->
+  <div class="watermark-kanji" aria-hidden="true">师</div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. HEADER SUPERIOR DE NAVEGACIÓN DOCENTE                                 -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E2DDD3] px-5 sm:px-8 py-3.5 shadow-xs">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+      
+      <!-- Esquina Izquierda: Logo y Perfil del Docente -->
+      <div class="flex items-center justify-between w-full lg:w-auto gap-4 shrink-0">
+        <div class="flex items-center gap-3">
+          <!-- Sello Rojo Imperial Hanzi -->
+          <div class="w-10 h-10 rounded-xl bg-brand-cinabrio text-white flex items-center justify-center font-serif text-xl font-black shadow-sm shadow-brand-cinabrio/20 ring-1 ring-brand-cinabrio/30">
+            学
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base font-extrabold tracking-tight text-slate-900 leading-tight">Tutor<span class="text-brand-cinabrio">IA</span></span>
+              <span class="text-xs text-slate-400">/</span>
+              <span class="font-serif text-sm font-bold text-brand-porcelain">华语</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-brand-porcelain/10 text-brand-porcelain border border-brand-porcelain/20">Docente</span>
+            </div>
+            <!-- Perfil del profesor -->
+            <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5 mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span class="font-semibold text-slate-700">Prof. Zhang Wei</span>
+              <span class="text-slate-300">•</span>
+              <span>Docente Titular HSK1</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Botón cerrar sesión visible en móviles -->
+        <button class="lg:hidden p-2 text-slate-400 hover:text-brand-cinabrio rounded-lg text-xs" title="Cerrar Sesión">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </button>
+      </div>
+
+      <!-- Centro: Selector de Aula Activa & Barra de Búsqueda -->
+      <div class="flex flex-1 items-center justify-center gap-3 w-full max-w-2xl">
+        <!-- Selector desplegable de aula -->
+        <div class="relative shrink-0 w-64 sm:w-72">
+          <label for="classroom-select" class="sr-only">Seleccionar Aula</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-brand-porcelain text-[19px] pointer-events-none">school</span>
+            <select id="classroom-select" class="w-full pl-9 pr-8 py-2 rounded-xl bg-white border border-[#D8D2C4] text-xs sm:text-sm font-semibold text-slate-800 shadow-2xs focus:border-brand-porcelain focus:ring-1 focus:ring-brand-porcelain/30 cursor-pointer transition-colors">
+              <option value="101" selected>Aula 101 — Grupo Principiante HSK 1A (28 alumnos)</option>
+              <option value="102">Aula 102 — Intensivo Fonética Pinyin (22 alumnos)</option>
+              <option value="103">Aula 103 — Caracteres & Trazo HSK 1B (18 alumnos)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Barra de búsqueda con atajo de teclado -->
+        <div class="relative flex-1">
+          <label for="search-input" class="sr-only">Buscar por estudiante o hash</label>
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Buscar por estudiante o SHA-256..." 
+            class="w-full pl-9 pr-14 py-2 rounded-xl bg-white border border-[#D8D2C4] text-xs sm:text-sm placeholder-slate-400 text-slate-800 shadow-2xs focus:border-brand-porcelain focus:ring-1 focus:ring-brand-porcelain/30 transition-colors"
+          >
+          <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
+            <kbd class="px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-slate-100 border border-slate-200 rounded">⌘K</kbd>
+          </div>
+        </div>
+      </div>
+
+      <!-- Esquina Derecha: Estado de RAG y Cerrar Sesión -->
+      <div class="hidden lg:flex items-center gap-4 shrink-0">
+        <!-- Indicador de estado del RAG -->
+        <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold shadow-2xs">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+          </span>
+          <span class="tracking-tight font-mono text-[11px]">RAG Engine v3.4 — Calibrado HSK1</span>
+        </div>
+
+        <!-- Botón Cerrar Sesión -->
+        <button type="button" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-brand-cinabrio hover:bg-red-50/80 rounded-xl transition-colors border border-transparent hover:border-red-200/50">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- CONTENIDO PRINCIPAL                                                       -->
+  <!-- ========================================================================= -->
+  <main class="max-w-7xl mx-auto w-full px-5 sm:px-8 pt-8 space-y-7 relative z-10">
+
+    <!-- Título de Sección y Protocolo Pedagógico -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="w-2 h-2 rounded-full bg-brand-cinabrio"></span>
+          <span class="text-xs font-bold tracking-widest uppercase text-brand-porcelain font-mono">HU-20 & HU-21 // AUDITORÍA ACADÉMICA</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          Panel de Monitoreo Analítico y Gobernanza Docente
+        </h1>
+        <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+          Control socrático en tiempo real, supervisión de inferencia RAG sobre vocabulario HSK 3.0 e inyección pedagógica directa en la trayectoria del alumno.
+        </p>
+      </div>
+
+      <!-- Acciones de Cabecera (Sincronización & Exportar) -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button type="button" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#D8D2C4] text-xs font-semibold text-slate-700 shadow-2xs hover:bg-[#FAF8F5] hover:text-brand-porcelain transition-all">
+          <span class="material-symbols-outlined text-[17px] text-slate-500">sync</span>
+          <span>Sincronizar SRS</span>
+        </button>
+        <button type="button" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-brand-porcelain text-white text-xs font-bold shadow-sm shadow-brand-porcelain/20 hover:bg-[#183e61] transition-all">
+          <span class="material-symbols-outlined text-[17px]">download</span>
+          <span>Descargar Informe Criptográfico</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 2. BANDA DE KPIs DE COHORTE (MÉTRICAS GENERALES)                          -->
+    <!-- ========================================================================= -->
+    <section aria-label="KPIs de Cohorte" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      
+      <!-- KPI 1: Participación Actual -->
+      <div class="bg-white border border-[#E2DDD3] rounded-2xl p-5 shadow-xs relative overflow-hidden group hover:border-brand-porcelain/30 transition-all">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">Métrica de Cohorte</span>
+            <h3 class="text-sm font-bold text-slate-800 mt-0.5">Participación en Vivo</h3>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-brand-porcelain flex items-center justify-center border border-blue-100">
+            <span class="material-symbols-outlined text-[22px]">hub</span>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2.5">
+          <span class="text-3xl font-extrabold text-slate-900 tracking-tight font-mono">24 <span class="text-lg font-normal text-slate-400">/ 28</span></span>
+          <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+            <span class="material-symbols-outlined text-[14px]">trending_up</span>
+            85.7% Asistencia
+          </span>
+        </div>
+        <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Sesiones activas RAG hoy: <strong>21</strong></span>
+          <span class="text-emerald-600 font-semibold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Quórum óptimo
+          </span>
+        </div>
+      </div>
+
+      <!-- KPI 2: Precisión Promedio Cohorte -->
+      <div class="bg-white border border-[#E2DDD3] rounded-2xl p-5 shadow-xs relative overflow-hidden group hover:border-brand-porcelain/30 transition-all">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">Asimilación Semántica</span>
+            <h3 class="text-sm font-bold text-slate-800 mt-0.5">Precisión Promedio Cohorte</h3>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-brand-green flex items-center justify-center border border-emerald-100">
+            <span class="material-symbols-outlined text-[22px]">verified</span>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline gap-2.5">
+          <span class="text-3xl font-extrabold text-brand-porcelain tracking-tight font-mono">82%</span>
+          <span class="inline-flex items-center text-xs font-semibold text-slate-600">
+            Aciertos globales en HSK1
+          </span>
+        </div>
+        <!-- Barra de progreso segmentada -->
+        <div class="mt-3.5 space-y-1.5">
+          <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex">
+            <div class="bg-emerald-600 h-2" style="width: 68%" title="Aciertos primer intento (68%)"></div>
+            <div class="bg-amber-500 h-2" style="width: 14%" title="Aciertos con pista socrática (14%)"></div>
+            <div class="bg-red-500 h-2" style="width: 18%" title="Fallos recurrentes (18%)"></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-600"></span> 68% Directo</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> 14% Con pista</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span> 18% Fallos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI 3: Alerta Pedagógica Urgente -->
+      <div class="bg-white border-2 border-red-200/90 rounded-2xl p-5 shadow-xs relative overflow-hidden group bg-gradient-to-br from-white via-white to-red-50/40">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-cinabrio font-mono flex items-center gap-1">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-cinabrio"></span>
+              </span>
+              Foco de Atención Urgente
+            </span>
+            <h3 class="text-sm font-bold text-slate-900 mt-0.5">Tone Sandhi (变调) — 38% fallos</h3>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-red-50 text-brand-cinabrio flex items-center justify-center border border-red-200">
+            <span class="material-symbols-outlined text-[22px]">warning</span>
+          </div>
+        </div>
+        <div class="mt-4">
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Dificultad crítica en el cambio de 3er tono consecutivo (<strong class="font-hanzi text-sm text-slate-900">你好</strong> / <span class="font-mono text-slate-700">nǐ hǎo → ní hǎo</span>) y regla de <strong class="font-hanzi text-sm text-slate-900">不</strong> (<span class="font-mono text-slate-700">bù/bú</span>).
+          </p>
+        </div>
+        <div class="mt-3.5 pt-3 border-t border-red-100 flex items-center justify-between">
+          <span class="text-xs font-semibold text-brand-cinabrio">3 alumnos en riesgo crítico</span>
+          <button type="button" onclick="openInterventionModal('David Unaucho')" class="text-xs font-bold text-brand-cinabrio hover:text-[#9e0b23] flex items-center gap-0.5 underline underline-offset-2">
+            Intervenir cohorte →
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 3. TABLA CENTRAL DE ESTUDIANTES Y GOBERNANZA EN 1-CLIC                    -->
+    <!-- ========================================================================= -->
+    <section class="bg-white border border-[#E2DDD3] rounded-2xl shadow-sm overflow-hidden" aria-label="Tabla de Gobernanza de Estudiantes">
+      
+      <!-- Barra Superior de Filtros y Búsqueda contextual -->
+      <div class="p-5 border-b border-[#E2DDD3] flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FAF8F5]/50">
+        
+        <!-- Pestañas de Filtro (con contadores) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0" role="tablist">
+          <button type="button" class="filter-tab active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-porcelain text-white shadow-2xs" data-filter="all">
+            Todos <span class="ml-1 opacity-80">(28)</span>
+          </button>
+          <button type="button" class="filter-tab px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-all flex items-center gap-1.5" data-filter="green">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            Al día <span class="text-slate-400 font-mono">(19)</span>
+          </button>
+          <button type="button" class="filter-tab px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-all flex items-center gap-1.5" data-filter="amber">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            Requiere Repaso <span class="text-slate-400 font-mono">(6)</span>
+          </button>
+          <button type="button" class="filter-tab px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition-all flex items-center gap-1.5" data-filter="red">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+            Riesgo de Rezago <span class="text-slate-400 font-mono">(3)</span>
+          </button>
+        </div>
+
+        <!-- Metadatos de la cohorte & Acciones en Lote -->
+        <div class="flex items-center gap-3 shrink-0">
+          <span class="text-xs text-slate-500 font-mono hidden sm:inline">Modo: Gobernanza Inmutable</span>
+          <div class="h-4 w-px bg-slate-300 hidden sm:block"></div>
+          <button type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 transition-colors">
+            <span class="material-symbols-outlined text-[16px]">tune</span>
+            <span>Ajustes SRS</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Tabla Responsiva de Estudiantes -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse" id="governance-table">
+          <thead>
+            <tr class="bg-[#F7F4EE] border-b border-[#E2DDD3] text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">
+              <th scope="col" class="py-3.5 px-5">Estudiante & Privacidad</th>
+              <th scope="col" class="py-3.5 px-5">Unidad Actual</th>
+              <th scope="col" class="py-3.5 px-5">Precisión RAG</th>
+              <th scope="col" class="py-3.5 px-5">Estado Pedagógico</th>
+              <th scope="col" class="py-3.5 px-5 text-right">Botonera de Acción en 1-Clic</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#EFEAE1] text-xs sm:text-sm">
+            
+            <!-- FILA 1: Ana Sofía Morales (Al día) -->
+            <tr class="hover:bg-[#FAF8F5] transition-colors group" data-status="green">
+              <!-- Columna 1: Estudiante & Privacidad -->
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-[#E8F0F7] text-brand-porcelain font-bold text-xs flex items-center justify-center border border-blue-200 shrink-0">
+                    AM
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-slate-900 group-hover:text-brand-porcelain transition-colors">Ana Sofía Morales</p>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-tight mt-0.5 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-slate-400">fingerprint</span>
+                      <span>SHA-256: 8f4a...e21c</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 2: Unidad Actual -->
+              <td class="py-4 px-5">
+                <div class="space-y-1">
+                  <p class="font-semibold text-slate-800 text-xs">Módulo 1: Saludos & Cortesía</p>
+                  <div class="flex items-center gap-2">
+                    <div class="w-32 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div class="bg-brand-porcelain h-1.5 rounded-full" style="width: 88%"></div>
+                    </div>
+                    <span class="text-[11px] font-mono font-semibold text-slate-500">88%</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 3: Precisión RAG -->
+              <td class="py-4 px-5">
+                <div class="space-y-0.5">
+                  <p class="font-bold text-slate-800 text-xs font-mono">88% Precisión</p>
+                  <p class="text-[11px] text-slate-500">142/161 aciertos</p>
+                </div>
+              </td>
+
+              <!-- Columna 4: Estado Pedagógico (Semáforo) -->
+              <td class="py-4 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <span class="w-2 h-2 rounded-full bg-[#2E7D32]"></span>
+                  🟢 Al día
+                </span>
+              </td>
+
+              <!-- Columna 5: Botonera 1-Clic -->
+              <td class="py-4 px-5 text-right">
+                <div class="inline-flex items-center gap-1.5 justify-end">
+                  <button type="button" class="btn-approve px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Aprobar Avance al Módulo Siguiente">
+                    <span class="material-symbols-outlined text-[15px] text-emerald-700">check</span>
+                    <span>Aprobar Avance</span>
+                  </button>
+                  <button type="button" class="btn-review px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-brand-cinabrio border border-red-200 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Asignar Repaso Temático">
+                    <span class="material-symbols-outlined text-[15px]">refresh</span>
+                    <span>Asignar Repaso</span>
+                  </button>
+                  <button type="button" onclick="openInterventionModal('Ana Sofía Morales')" class="btn-intervene px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-[#D8D2C4] font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Intervención socrática manual">
+                    <span class="material-symbols-outlined text-[15px] text-brand-porcelain">alt_route</span>
+                    <span>Intervenir Ruta</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- FILA 2: David Unaucho (Riesgo de Rezago) -->
+            <tr class="hover:bg-red-50/20 bg-red-50/10 transition-colors group" data-status="red">
+              <!-- Columna 1: Estudiante & Privacidad -->
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-red-100 text-brand-cinabrio font-bold text-xs flex items-center justify-center border border-red-300 shrink-0">
+                    DU
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                      <p class="font-bold text-slate-900 group-hover:text-brand-cinabrio transition-colors">David Unaucho</p>
+                      <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-red-100 text-brand-cinabrio uppercase">Atención</span>
+                    </div>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-tight mt-0.5 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-slate-400">fingerprint</span>
+                      <span>SHA-256: 4c19...b83f</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 2: Unidad Actual -->
+              <td class="py-4 px-5">
+                <div class="space-y-1">
+                  <p class="font-semibold text-slate-800 text-xs">Módulo 1: Saludos & Cortesía</p>
+                  <div class="flex items-center gap-2">
+                    <div class="w-32 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div class="bg-red-500 h-1.5 rounded-full" style="width: 38%"></div>
+                    </div>
+                    <span class="text-[11px] font-mono font-semibold text-red-600">38%</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 3: Precisión RAG -->
+              <td class="py-4 px-5">
+                <div class="space-y-0.5">
+                  <p class="font-bold text-red-600 text-xs font-mono">51% Precisión</p>
+                  <p class="text-[11px] text-slate-500">62/121 aciertos (Tono 3)</p>
+                </div>
+              </td>
+
+              <!-- Columna 4: Estado Pedagógico (Semáforo) -->
+              <td class="py-4 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-brand-cinabrio border border-red-200">
+                  <span class="w-2 h-2 rounded-full bg-[#C8102E]"></span>
+                  🔴 Riesgo de Rezago
+                </span>
+              </td>
+
+              <!-- Columna 5: Botonera 1-Clic -->
+              <td class="py-4 px-5 text-right">
+                <div class="inline-flex items-center gap-1.5 justify-end">
+                  <button type="button" class="btn-approve px-2.5 py-1.5 rounded-lg bg-slate-50 text-slate-400 border border-slate-200 font-semibold text-xs opacity-60 cursor-not-allowed" disabled title="No cumple umbral mínimo (>=75%)">
+                    <span class="material-symbols-outlined text-[15px]">check</span>
+                    <span>Aprobar Avance</span>
+                  </button>
+                  <button type="button" class="btn-review px-2.5 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-brand-cinabrio border border-red-300 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Asignar Repaso Urgente">
+                    <span class="material-symbols-outlined text-[15px]">refresh</span>
+                    <span>Asignar Repaso</span>
+                  </button>
+                  <button type="button" onclick="openInterventionModal('David Unaucho')" class="btn-intervene px-3 py-1.5 rounded-lg bg-brand-cinabrio hover:bg-[#a80d26] text-white font-bold text-xs transition-all flex items-center gap-1 shadow-xs shadow-brand-cinabrio/20 ring-1 ring-brand-cinabrio" title="Intervención prioritaria recomendada">
+                    <span class="material-symbols-outlined text-[15px]">alt_route</span>
+                    <span>Intervenir Ruta</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- FILA 3: Carlos Bernabé (Requiere Repaso) -->
+            <tr class="hover:bg-[#FAF8F5] transition-colors group" data-status="amber">
+              <!-- Columna 1: Estudiante & Privacidad -->
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-700 font-bold text-xs flex items-center justify-center border border-amber-200 shrink-0">
+                    CB
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-slate-900 group-hover:text-brand-porcelain transition-colors">Carlos Bernabé</p>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-tight mt-0.5 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-slate-400">fingerprint</span>
+                      <span>SHA-256: 3a92...f709</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 2: Unidad Actual -->
+              <td class="py-4 px-5">
+                <div class="space-y-1">
+                  <p class="font-semibold text-slate-800 text-xs">Módulo 1: Saludos & Cortesía</p>
+                  <div class="flex items-center gap-2">
+                    <div class="w-32 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div class="bg-amber-500 h-1.5 rounded-full" style="width: 71%"></div>
+                    </div>
+                    <span class="text-[11px] font-mono font-semibold text-amber-700">71%</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 3: Precisión RAG -->
+              <td class="py-4 px-5">
+                <div class="space-y-0.5">
+                  <p class="font-bold text-slate-800 text-xs font-mono">73% Precisión</p>
+                  <p class="text-[11px] text-slate-500">105/144 aciertos</p>
+                </div>
+              </td>
+
+              <!-- Columna 4: Estado Pedagógico (Semáforo) -->
+              <td class="py-4 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                  <span class="w-2 h-2 rounded-full bg-[#FFA500]"></span>
+                  🟡 Requiere Repaso
+                </span>
+              </td>
+
+              <!-- Columna 5: Botonera 1-Clic -->
+              <td class="py-4 px-5 text-right">
+                <div class="inline-flex items-center gap-1.5 justify-end">
+                  <button type="button" class="btn-approve px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Aprobar Condicional">
+                    <span class="material-symbols-outlined text-[15px] text-emerald-700">check</span>
+                    <span>Aprobar Avance</span>
+                  </button>
+                  <button type="button" class="btn-review px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-brand-cinabrio border border-red-200 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Asignar Repaso">
+                    <span class="material-symbols-outlined text-[15px]">refresh</span>
+                    <span>Asignar Repaso</span>
+                  </button>
+                  <button type="button" onclick="openInterventionModal('Carlos Bernabé')" class="btn-intervene px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-[#D8D2C4] font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Intervención socrática manual">
+                    <span class="material-symbols-outlined text-[15px] text-brand-porcelain">alt_route</span>
+                    <span>Intervenir Ruta</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- FILA 4: Mateo Lin Valdivieso (Al día) -->
+            <tr class="hover:bg-[#FAF8F5] transition-colors group" data-status="green">
+              <!-- Columna 1: Estudiante & Privacidad -->
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-[#E8F0F7] text-brand-porcelain font-bold text-xs flex items-center justify-center border border-blue-200 shrink-0">
+                    ML
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-slate-900 group-hover:text-brand-porcelain transition-colors">Mateo Lin Valdivieso</p>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-tight mt-0.5 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-slate-400">fingerprint</span>
+                      <span>SHA-256: 7e2d...01c4</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 2: Unidad Actual -->
+              <td class="py-4 px-5">
+                <div class="space-y-1">
+                  <p class="font-semibold text-slate-800 text-xs">Módulo 1: Saludos & Cortesía</p>
+                  <div class="flex items-center gap-2">
+                    <div class="w-32 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div class="bg-brand-porcelain h-1.5 rounded-full" style="width: 95%"></div>
+                    </div>
+                    <span class="text-[11px] font-mono font-semibold text-slate-500">95%</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 3: Precisión RAG -->
+              <td class="py-4 px-5">
+                <div class="space-y-0.5">
+                  <p class="font-bold text-slate-800 text-xs font-mono">94% Precisión</p>
+                  <p class="text-[11px] text-slate-500">178/189 aciertos</p>
+                </div>
+              </td>
+
+              <!-- Columna 4: Estado Pedagógico (Semáforo) -->
+              <td class="py-4 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <span class="w-2 h-2 rounded-full bg-[#2E7D32]"></span>
+                  🟢 Al día
+                </span>
+              </td>
+
+              <!-- Columna 5: Botonera 1-Clic -->
+              <td class="py-4 px-5 text-right">
+                <div class="inline-flex items-center gap-1.5 justify-end">
+                  <button type="button" class="btn-approve px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Aprobar Avance">
+                    <span class="material-symbols-outlined text-[15px] text-emerald-700">check</span>
+                    <span>Aprobar Avance</span>
+                  </button>
+                  <button type="button" class="btn-review px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-brand-cinabrio border border-red-200 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Asignar Repaso">
+                    <span class="material-symbols-outlined text-[15px]">refresh</span>
+                    <span>Asignar Repaso</span>
+                  </button>
+                  <button type="button" onclick="openInterventionModal('Mateo Lin Valdivieso')" class="btn-intervene px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-[#D8D2C4] font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs" title="Intervención socrática manual">
+                    <span class="material-symbols-outlined text-[15px] text-brand-porcelain">alt_route</span>
+                    <span>Intervenir Ruta</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- FILA 5: Valentina Zhao Romero (Riesgo de Rezago) -->
+            <tr class="hover:bg-red-50/20 bg-red-50/10 transition-colors group" data-status="red">
+              <!-- Columna 1: Estudiante & Privacidad -->
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-red-100 text-brand-cinabrio font-bold text-xs flex items-center justify-center border border-red-300 shrink-0">
+                    VZ
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-slate-900 group-hover:text-brand-cinabrio transition-colors">Valentina Zhao Romero</p>
+                    <p class="text-[11px] font-mono text-slate-400 tracking-tight mt-0.5 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-slate-400">fingerprint</span>
+                      <span>SHA-256: 91fa...33ba</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 2: Unidad Actual -->
+              <td class="py-4 px-5">
+                <div class="space-y-1">
+                  <p class="font-semibold text-slate-800 text-xs">Módulo 1: Saludos & Cortesía</p>
+                  <div class="flex items-center gap-2">
+                    <div class="w-32 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div class="bg-red-500 h-1.5 rounded-full" style="width: 42%"></div>
+                    </div>
+                    <span class="text-[11px] font-mono font-semibold text-red-600">42%</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Columna 3: Precisión RAG -->
+              <td class="py-4 px-5">
+                <div class="space-y-0.5">
+                  <p class="font-bold text-red-600 text-xs font-mono">56% Precisión</p>
+                  <p class="text-[11px] text-slate-500">54/96 aciertos</p>
+                </div>
+              </td>
+
+              <!-- Columna 4: Estado Pedagógico (Semáforo) -->
+              <td class="py-4 px-5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-brand-cinabrio border border-red-200">
+                  <span class="w-2 h-2 rounded-full bg-[#C8102E]"></span>
+                  🔴 Riesgo de Rezago
+                </span>
+              </td>
+
+              <!-- Columna 5: Botonera 1-Clic -->
+              <td class="py-4 px-5 text-right">
+                <div class="inline-flex items-center gap-1.5 justify-end">
+                  <button type="button" class="btn-approve px-2.5 py-1.5 rounded-lg bg-slate-50 text-slate-400 border border-slate-200 font-semibold text-xs opacity-60 cursor-not-allowed" disabled>
+                    <span class="material-symbols-outlined text-[15px]">check</span>
+                    <span>Aprobar Avance</span>
+                  </button>
+                  <button type="button" class="btn-review px-2.5 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-brand-cinabrio border border-red-300 font-semibold text-xs transition-all flex items-center gap-1 shadow-2xs">
+                    <span class="material-symbols-outlined text-[15px]">refresh</span>
+                    <span>Asignar Repaso</span>
+                  </button>
+                  <button type="button" onclick="openInterventionModal('Valentina Zhao Romero')" class="btn-intervene px-3 py-1.5 rounded-lg bg-brand-cinabrio hover:bg-[#a80d26] text-white font-bold text-xs transition-all flex items-center gap-1 shadow-xs shadow-brand-cinabrio/20">
+                    <span class="material-symbols-outlined text-[15px]">alt_route</span>
+                    <span>Intervenir Ruta</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación y Resumen de Registros -->
+      <div class="p-4 bg-[#FAF8F5] border-t border-[#E2DDD3] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <div class="flex items-center gap-2">
+          <span>Mostrando <strong class="text-slate-800">5</strong> de <strong class="text-slate-800">28</strong> estudiantes de la cohorte</span>
+          <span class="text-slate-300">•</span>
+          <span class="text-emerald-700 font-medium">Sincronizado con base de datos descentralizada</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button type="button" class="px-2.5 py-1.5 rounded-lg bg-white border border-[#D8D2C4] text-slate-600 font-semibold hover:bg-slate-50 transition-colors disabled:opacity-40" disabled>Anterior</button>
+          <span class="px-3 py-1 rounded-lg bg-brand-porcelain text-white font-bold">1</span>
+          <button type="button" class="px-2.5 py-1.5 rounded-lg bg-white border border-[#D8D2C4] text-slate-600 font-semibold hover:bg-slate-50 transition-colors">2</button>
+          <button type="button" class="px-2.5 py-1.5 rounded-lg bg-white border border-[#D8D2C4] text-slate-600 font-semibold hover:bg-slate-50 transition-colors">3</button>
+          <button type="button" class="px-2.5 py-1.5 rounded-lg bg-white border border-[#D8D2C4] text-slate-600 font-semibold hover:bg-slate-50 transition-colors">Siguiente</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. MODAL INTERACTIVO DE INTERVENCIÓN DOCENTE (HU-21)                      -->
+  <!-- ========================================================================= -->
+  <div id="intervention-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-200 opacity-0 pointer-events-none" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    
+    <!-- Contenedor del Modal con diseño editorial Porcelain & Vermilion -->
+    <div class="relative w-full max-w-xl bg-[#FAF8F5] rounded-3xl border border-[#D8D2C4] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-200" id="modal-container">
+      
+      <!-- Encabezado con sello caligráfico -->
+      <div class="px-6 py-5 bg-white border-b border-[#E2DDD3] flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-cinabrio text-white flex items-center justify-center font-serif text-lg font-black shadow-sm">
+            改
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-brand-cinabrio font-mono">GOBERNANZA DOCENTE EN 1-CLIC (HU-21)</span>
+            <h2 id="modal-title" class="text-base font-bold text-slate-900 leading-tight">
+              Ajuste Manual de Ruta para <span id="modal-student-name" class="text-brand-porcelain font-extrabold">David Unaucho</span>
+            </h2>
+          </div>
+        </div>
+        <!-- Botón cerrar modal -->
+        <button type="button" onclick="closeInterventionModal()" class="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors" title="Cerrar ventana">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Cuerpo del Modal -->
+      <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        
+        <!-- Explicación Pedagógica Breve -->
+        <div class="bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4 text-xs text-slate-700 leading-relaxed flex items-start gap-3">
+          <span class="material-symbols-outlined text-brand-porcelain text-[20px] shrink-0 mt-0.5">info</span>
+          <div>
+            <p class="font-bold text-brand-porcelain">Inyección Directa en Cola SRS:</p>
+            <p class="mt-0.5">
+              Los caracteres seleccionados serán forzados en la siguiente sesión del estudiante con prioridad alta (intervalo de repetición espaciada ajustado a 10 min), pausando la lección general hasta verificar su asimilación.
+            </p>
+          </div>
+        </div>
+
+        <!-- Lista de Caracteres Hanzi con Mayor Índice de Error -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 font-mono">
+              Caracteres Hanzi con Fallos Detectados por IA RAG:
+            </h3>
+            <span class="text-[11px] text-brand-cinabrio font-semibold">Tono 3 & Tono Sandhi</span>
+          </div>
+
+          <!-- Cuadrícula interactiva de selección de Hanzi -->
+          <div class="space-y-2.5">
+            
+            <!-- Carácter 1: 你好 -->
+            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E2DDD3] hover:border-brand-cinabrio/40 cursor-pointer transition-all shadow-2xs group">
+              <div class="flex items-center gap-3.5">
+                <input type="checkbox" name="hanzi_selection" value="你好" checked class="w-4 h-4 rounded text-brand-cinabrio border-slate-300 focus:ring-brand-cinabrio">
+                <div class="w-12 h-12 rounded-xl bg-[#F5F1E8] text-brand-porcelain flex items-center justify-center font-hanzi text-2xl font-black border border-[#E2DDD3]">
+                  你好
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-xs font-bold text-slate-800">nǐ hǎo</span>
+                    <span class="text-[11px] text-slate-500">(Hola)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Fallo en modulación: pronunció 3er tono pleno en vez de 2do tono ascendente.</p>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-red-50 text-red-700 border border-red-200">
+                  48% Error
+                </span>
+              </div>
+            </label>
+
+            <!-- Carácter 2: 谢谢 -->
+            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E2DDD3] hover:border-brand-cinabrio/40 cursor-pointer transition-all shadow-2xs group">
+              <div class="flex items-center gap-3.5">
+                <input type="checkbox" name="hanzi_selection" value="谢谢" checked class="w-4 h-4 rounded text-brand-cinabrio border-slate-300 focus:ring-brand-cinabrio">
+                <div class="w-12 h-12 rounded-xl bg-[#F5F1E8] text-brand-porcelain flex items-center justify-center font-hanzi text-2xl font-black border border-[#E2DDD3]">
+                  谢谢
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-xs font-bold text-slate-800">xièxie</span>
+                    <span class="text-[11px] text-slate-500">(Gracias)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Confusión con radical fonético <span class="font-hanzi font-semibold">射</span> y tono neutro final.</p>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                  34% Error
+                </span>
+              </div>
+            </label>
+
+            <!-- Carácter 3: 再见 -->
+            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E2DDD3] hover:border-brand-cinabrio/40 cursor-pointer transition-all shadow-2xs group">
+              <div class="flex items-center gap-3.5">
+                <input type="checkbox" name="hanzi_selection" value="再见" class="w-4 h-4 rounded text-brand-cinabrio border-slate-300 focus:ring-brand-cinabrio">
+                <div class="w-12 h-12 rounded-xl bg-[#F5F1E8] text-brand-porcelain flex items-center justify-center font-hanzi text-2xl font-black border border-[#E2DDD3]">
+                  再见
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-xs font-bold text-slate-800">zàijiàn</span>
+                    <span class="text-[11px] text-slate-500">(Adiós)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Doble 4to tono (descendente brusco): fatiga fonética detectada.</p>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                  21% Error
+                </span>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Opciones de Estrategia Socrática -->
+        <div class="bg-white border border-[#E2DDD3] rounded-2xl p-4 space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 font-mono">
+            Modalidad de Intervención RAG para el Estudiante:
+          </label>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-brand-cinabrio/30 bg-red-50/40 cursor-pointer font-medium text-slate-800">
+              <input type="radio" name="pedagogical_mode" value="strict" checked class="text-brand-cinabrio focus:ring-brand-cinabrio">
+              <span>Chat Guiado con Opciones</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-[#D8D2C4] bg-white cursor-pointer font-medium text-slate-600 hover:bg-slate-50">
+              <input type="radio" name="pedagogical_mode" value="phonetic" class="text-brand-cinabrio focus:ring-brand-cinabrio">
+              <span>Refuerzo Auditivo Nativo</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pie del Modal con Botones de Acción -->
+      <div class="px-6 py-4 bg-[#F5F1E8] border-t border-[#E2DDD3] flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span class="text-[11px] font-mono text-slate-500 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[15px] text-emerald-600">lock</span>
+          Firma Criptográfica SHA-256 habilitada
+        </span>
+
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+          <button type="button" onclick="closeInterventionModal()" class="w-full sm:w-auto px-4 py-2 rounded-xl border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 font-bold text-xs uppercase tracking-wider transition-colors shadow-2xs">
+            Cancelar
+          </button>
+          <button type="button" onclick="confirmIntervention()" class="w-full sm:w-auto px-5 py-2 rounded-xl bg-brand-cinabrio hover:bg-[#a80d26] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md shadow-brand-cinabrio/20 transition-all">
+            <span class="material-symbols-outlined text-[17px]">bolt</span>
+            <span>Guardar e Inyectar en Ruta</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TOAST DE CONFIRMACIÓN DE ACCIÓN                                           -->
+  <!-- ========================================================================= -->
+  <aside id="action-toast" class="fixed bottom-6 right-8 z-50 flex items-center gap-3 px-4 py-3 bg-slate-900 text-white rounded-2xl shadow-xl transition-all duration-300 transform translate-y-10 opacity-0 pointer-events-none" aria-live="polite">
+    <span class="material-symbols-outlined text-emerald-400 text-[22px]">check_circle</span>
+    <div>
+      <p class="text-xs font-bold text-white tracking-wide" id="toast-title">Acción de Gobernanza Ejecutada</p>
+      <p class="text-[11px] text-slate-300 font-mono" id="toast-desc">La ruta del estudiante ha sido actualizada en la base SRS.</p>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- SCRIPTS INTERACTIVOS CLIENT-SIDE                                          -->
+  <!-- ========================================================================= -->
+  <script>
+    // 1. Manejo del Modal de Intervención Docente
+    const modal = document.getElementById('intervention-modal');
+    const modalContainer = document.getElementById('modal-container');
+    const modalStudentName = document.getElementById('modal-student-name');
+    const toast = document.getElementById('action-toast');
+    const toastTitle = document.getElementById('toast-title');
+    const toastDesc = document.getElementById('toast-desc');
+
+    function openInterventionModal(studentName) {
+      if (modalStudentName) modalStudentName.textContent = studentName;
+      if (modal && modalContainer) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.classList.add('opacity-100');
+        modalContainer.classList.remove('scale-95');
+        modalContainer.classList.add('scale-100');
+      }
+    }
+
+    function closeInterventionModal() {
+      if (modal && modalContainer) {
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modalContainer.classList.remove('scale-100');
+        modalContainer.classList.add('scale-95');
+      }
+    }
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal && !modal.classList.contains('opacity-0')) {
+        closeInterventionModal();
+      }
+    });
+
+    // Cerrar al clickear backdrop
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeInterventionModal();
+      });
+    }
+
+    // Mostrar Toast dinámico
+    function showToast(title, desc) {
+      if (toast) {
+        if (toastTitle) toastTitle.textContent = title;
+        if (toastDesc) toastDesc.textContent = desc;
+        toast.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(() => {
+          toast.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
+        }, 4000);
+      }
+    }
+
+    // Confirmar Intervención desde el Modal
+    function confirmIntervention() {
+      const selected = Array.from(document.querySelectorAll('input[name="hanzi_selection"]:checked')).map(cb => cb.value);
+      const student = modalStudentName ? modalStudentName.textContent : 'Estudiante';
+      closeInterventionModal();
+      showToast(
+        'Ruta de Aprendizaje Reconfigurada',
+        `Inyectados ${selected.length} caracteres prioritarios en la cola SRS de ${student}.`
+      );
+    }
+
+    // 2. Acciones Rápidas en la Tabla (Aprobar Avance & Asignar Repaso)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Botones Aprobar Avance
+      document.querySelectorAll('.btn-approve').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          if (btn.hasAttribute('disabled')) return;
+          const tr = btn.closest('tr');
+          const name = tr.querySelector('td:first-child p.font-bold')?.textContent || 'el estudiante';
+          showToast(
+            'Avance Aprobado por el Docente',
+            `Se autorizó la apertura del Módulo 2 para ${name}.`
+          );
+        });
+      });
+
+      // Botones Asignar Repaso
+      document.querySelectorAll('.btn-review').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const tr = btn.closest('tr');
+          const name = tr.querySelector('td:first-child p.font-bold')?.textContent || 'el estudiante';
+          showToast(
+            'Repaso Pedagógico Asignado',
+            `Se programó una sesión de afianzamiento en el chat socrático para ${name}.`
+          );
+        });
+      });
+
+      // 3. Filtrado por Pestañas
+      const tabs = document.querySelectorAll('.filter-tab');
+      const rows = document.querySelectorAll('#governance-table tbody tr');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('bg-brand-porcelain', 'text-white', 'shadow-2xs');
+            t.classList.add('text-slate-600');
+          });
+          tab.classList.add('bg-brand-porcelain', 'text-white', 'shadow-2xs');
+          tab.classList.remove('text-slate-600');
+
+          const filter = tab.getAttribute('data-filter');
+          rows.forEach(row => {
+            if (filter === 'all') {
+              row.style.display = '';
+            } else {
+              const status = row.getAttribute('data-status');
+              row.style.display = (status === filter) ? '' : 'none';
+            }
+          });
+        });
+      });
+
+      // 4. Búsqueda en vivo por nombre o SHA-256
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const q = e.target.value.toLowerCase().trim();
+          rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(q) ? '' : 'none';
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

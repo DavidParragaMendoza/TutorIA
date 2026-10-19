@@ -1,0 +1,248 @@
+{
+  "marca": {
+    "nombreBase": "Tutor",
+    "nombreDestacado": "IA",
+    "hanzi": "华语",
+    "etiquetaRol": "Docente"
+  },
+  "docente": {
+    "nombreCompleto": "María Fernández",
+    "nombreCorto": "María F.",
+    "iniciales": "MF",
+    "rol": "Docente",
+    "cargo": "Docente Titular HSK1"
+  },
+  "periodoAcademico": {
+    "etiqueta": "Periodo Académico 2026-II",
+    "rango": "Agosto – Diciembre 2026",
+    "fechaSincronizacion": "19 de octubre de 2026"
+  },
+  "aulas": [
+    { "id": "101", "etiqueta": "Aula 101 — Grupo Principiante HSK 1A (28 alumnos)" },
+    { "id": "102", "etiqueta": "Aula 102 — Intensivo Fonética Pinyin (22 alumnos)" },
+    { "id": "103", "etiqueta": "Aula 103 — Caracteres & Trazo HSK 1B (18 alumnos)" }
+  ],
+  "estadoRag": "RAG Engine v3.4 — Calibrado HSK1",
+  "kpiParticipacion": {
+    "etiquetaSuperior": "Métrica de Cohorte",
+    "titulo": "Participación en Vivo",
+    "valor": "24",
+    "total": "/ 28",
+    "insignia": "85.7% Asistencia",
+    "icono": "hub",
+    "detalleIzquierda": "Sesiones activas RAG hoy:",
+    "detalleIzquierdaValor": "21",
+    "detalleDerecha": "Quórum óptimo"
+  },
+  "kpiPrecision": {
+    "etiquetaSuperior": "Asimilación Semántica",
+    "titulo": "Precisión Promedio Cohorte",
+    "valor": "82%",
+    "descripcion": "Aciertos globales en HSK1",
+    "icono": "verified",
+    "segmentos": [
+      { "tipo": "directo", "porcentaje": 68, "etiqueta": "68% Directo" },
+      { "tipo": "pista", "porcentaje": 14, "etiqueta": "14% Con pista" },
+      { "tipo": "fallos", "porcentaje": 18, "etiqueta": "18% Fallos" }
+    ]
+  },
+  "kpiAlerta": {
+    "etiquetaSuperior": "Foco de Atención Urgente",
+    "titulo": "Tone Sandhi (变调) — 38% fallos",
+    "icono": "warning",
+    "descripcionHtml": "Dificultad crítica en el cambio de 3er tono consecutivo (你好 / nǐ hǎo → ní hǎo) y regla de 不 (bù/bú).",
+    "pieIzquierda": "3 alumnos en riesgo crítico",
+    "accion": "Intervenir cohorte"
+  },
+  "filtros": [
+    { "clave": "todos", "etiqueta": "Todos", "total": 28, "punto": null },
+    { "clave": "alDia", "etiqueta": "Al día", "total": 19, "punto": "bg-emerald-500" },
+    { "clave": "repaso", "etiqueta": "Requiere Repaso", "total": 6, "punto": "bg-amber-500" },
+    { "clave": "riesgo", "etiqueta": "Riesgo de Rezago", "total": 3, "punto": "bg-red-500" }
+  ],
+  "estudiantes": [
+    {
+      "id": 1,
+      "iniciales": "AM",
+      "nombreCompleto": "Ana Sofía Morales",
+      "hash": "SHA-256: 8f4a...e21c",
+      "estado": "alDia",
+      "estadoEtiqueta": "Al día",
+      "requiereAtencion": false,
+      "moduloActual": "Módulo 1: Saludos & Cortesía",
+      "progreso": 88,
+      "precisionTexto": "88% Precisión",
+      "aciertosTexto": "142/161 aciertos",
+      "notaPrecision": "",
+      "puedeAprobar": true,
+      "intervencionPrioritaria": false,
+      "tonoAvatar": "porcelain",
+      "tonoBarra": "porcelain"
+    },
+    {
+      "id": 2,
+      "iniciales": "DU",
+      "nombreCompleto": "David Unaucho",
+      "hash": "SHA-256: 4c19...b83f",
+      "estado": "riesgo",
+      "estadoEtiqueta": "Riesgo de Rezago",
+      "requiereAtencion": true,
+      "moduloActual": "Módulo 1: Saludos & Cortesía",
+      "progreso": 38,
+      "precisionTexto": "51% Precisión",
+      "aciertosTexto": "62/121 aciertos (Tono 3)",
+      "notaPrecision": "",
+      "puedeAprobar": false,
+      "intervencionPrioritaria": true,
+      "tonoAvatar": "cinabrio",
+      "tonoBarra": "cinabrio"
+    },
+    {
+      "id": 3,
+      "iniciales": "CB",
+      "nombreCompleto": "Carlos Bernabé",
+      "hash": "SHA-256: 3a92...f709",
+      "estado": "repaso",
+      "estadoEtiqueta": "Requiere Repaso",
+      "requiereAtencion": false,
+      "moduloActual": "Módulo 1: Saludos & Cortesía",
+      "progreso": 71,
+      "precisionTexto": "73% Precisión",
+      "aciertosTexto": "105/144 aciertos",
+      "notaPrecision": "",
+      "puedeAprobar": true,
+      "intervencionPrioritaria": false,
+      "tonoAvatar": "amber",
+      "tonoBarra": "amber"
+    },
+    {
+      "id": 4,
+      "iniciales": "ML",
+      "nombreCompleto": "Mateo Lin Valdivieso",
+      "hash": "SHA-256: 7e2d...01c4",
+      "estado": "alDia",
+      "estadoEtiqueta": "Al día",
+      "requiereAtencion": false,
+      "moduloActual": "Módulo 1: Saludos & Cortesía",
+      "progreso": 95,
+      "precisionTexto": "94% Precisión",
+      "aciertosTexto": "178/189 aciertos",
+      "notaPrecision": "",
+      "puedeAprobar": true,
+      "intervencionPrioritaria": false,
+      "tonoAvatar": "porcelain",
+      "tonoBarra": "porcelain"
+    },
+    {
+      "id": 5,
+      "iniciales": "VZ",
+      "nombreCompleto": "Valentina Zhao Romero",
+      "hash": "SHA-256: 91fa...33ba",
+      "estado": "riesgo",
+      "estadoEtiqueta": "Riesgo de Rezago",
+      "requiereAtencion": false,
+      "moduloActual": "Módulo 1: Saludos & Cortesía",
+      "progreso": 42,
+      "precisionTexto": "56% Precisión",
+      "aciertosTexto": "54/96 aciertos",
+      "notaPrecision": "",
+      "puedeAprobar": false,
+      "intervencionPrioritaria": true,
+      "tonoAvatar": "cinabrio",
+      "tonoBarra": "cinabrio"
+    }
+  ],
+  "paginacion": {
+    "mostrados": 5,
+    "totalCohorte": 28,
+    "mensajeSincronizacion": "Sincronizado con base de datos descentralizada",
+    "paginaActual": 1,
+    "paginas": 3
+  },
+  "modalIntervencion": {
+    "sello": "改",
+    "etiqueta": "GOBERNANZA DOCENTE EN 1-CLIC (HU-21)",
+    "tituloPrefijo": "Ajuste Manual de Ruta para",
+    "avisoTitulo": "Inyección Directa en Cola SRS:",
+    "avisoTexto": "Los caracteres seleccionados serán forzados en la siguiente sesión del estudiante con prioridad alta (intervalo de repetición espaciada ajustado a 10 min), pausando la lección general hasta verificar su asimilación.",
+    "etiquetaCaracteres": "Caracteres Hanzi con Fallos Detectados por IA RAG:",
+    "notaCaracteres": "Tono 3 & Tono Sandhi",
+    "etiquetaModalidad": "Modalidad de Intervención RAG para el Estudiante:",
+    "firmaCriptografica": "Firma Criptográfica SHA-256 habilitada",
+    "botonCancelar": "Cancelar",
+    "botonConfirmar": "Guardar e Inyectar en Ruta",
+    "hanzi": [
+      {
+        "caracter": "你好",
+        "pinyin": "nǐ hǎo",
+        "significado": "(Hola)",
+        "descripcion": "Fallo en modulación: pronunció 3er tono pleno en vez de 2do tono ascendente.",
+        "porcentajeError": "48% Error",
+        "tonoError": "critico",
+        "seleccionado": true
+      },
+      {
+        "caracter": "谢谢",
+        "pinyin": "xièxie",
+        "significado": "(Gracias)",
+        "descripcion": "Confusión con radical fonético 射 y tono neutro final.",
+        "porcentajeError": "34% Error",
+        "tonoError": "atencion",
+        "seleccionado": true
+      },
+      {
+        "caracter": "再见",
+        "pinyin": "zàijiàn",
+        "significado": "(Adiós)",
+        "descripcion": "Doble 4to tono (descendente brusco): fatiga fonética detectada.",
+        "porcentajeError": "21% Error",
+        "tonoError": "neutral",
+        "seleccionado": false
+      }
+    ],
+    "modalidades": [
+      { "id": "guiado", "etiqueta": "Chat Guiado con Opciones", "predeterminada": true },
+      { "id": "auditivo", "etiqueta": "Refuerzo Auditivo Nativo", "predeterminada": false }
+    ]
+  },
+  "notificacion": {
+    "tituloAprobacion": "Avance Aprobado por el Docente",
+    "tituloRepaso": "Repaso Pedagógico Asignado",
+    "tituloIntervencion": "Ruta de Aprendizaje Reconfigurada",
+    "descripcionAprobacion": "Se autorizó la apertura del Módulo 2 para",
+    "descripcionRepaso": "Se programó una sesión de afianzamiento en el chat socrático para",
+    "descripcionIntervencion": "Caracteres prioritarios inyectados en la cola SRS de"
+  },
+  "textos": {
+    "protocolo": "HU-20 & HU-21 // AUDITORÍA ACADÉMICA",
+    "titulo": "Panel de Monitoreo Analítico y Gobernanza Docente",
+    "subtitulo": "Control socrático en tiempo real, supervisión de inferencia RAG sobre vocabulario HSK 3.0 e inyección pedagógica directa en la trayectoria del alumno.",
+    "sincronizarSrs": "Sincronizar SRS",
+    "descargarInforme": "Descargar Informe Criptográfico",
+    "buscarPlaceholder": "Buscar por estudiante o SHA-256...",
+    "modoGobernanza": "Modo: Gobernanza Inmutable",
+    "ajustesSrs": "Ajustes SRS",
+    "columnaEstudiante": "Estudiante & Privacidad",
+    "columnaUnidad": "Unidad Actual",
+    "columnaPrecision": "Precisión RAG",
+    "columnaEstado": "Estado Pedagógico",
+    "columnaAcciones": "Botonera de Acción en 1-Clic",
+    "botonAprobar": "Aprobar Avance",
+    "botonRepaso": "Asignar Repaso",
+    "botonIntervenir": "Intervenir Ruta",
+    "tooltipAprobarBloqueado": "No cumple umbral mínimo (>=75%)",
+    "tooltipAprobar": "Aprobar Avance al Módulo Siguiente",
+    "tooltipRepaso": "Asignar Repaso Temático",
+    "tooltipIntervenir": "Intervención socrática manual",
+    "etiquetaAtencion": "Atención",
+    "anterior": "Anterior",
+    "siguiente": "Siguiente",
+    "mostrando": "Mostrando",
+    "de": "de",
+    "estudiantesCohorte": "estudiantes de la cohorte",
+    "cerrarSesion": "Cerrar Sesión",
+    "pieMarca": "TutorIA Studio",
+    "pieEstado": "SRS Interval Repetition Active",
+    "intervencionCohorteEtiqueta": "Intervención de cohorte"
+  }
+}

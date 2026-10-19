@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KUMA HuaYu Admin — Gestión de Usuarios</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rice: '#F5F1E8',
+            porcelain: '#1F4E79',
+            'porcelain-dark': '#153655',
+            'porcelain-light': '#EBF2F7',
+            seal: '#C8102E',
+            'seal-hover': '#aa0d26',
+            cardBg: '#FAF8F5',
+            borderSubtle: '#D8E2EA',
+            errorRed: '#ba1a1a',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serifSc: ['"Noto Serif SC"', 'serif'],
+          },
+          boxShadow: {
+            'modal': '0 24px 48px -12px rgba(31, 78, 121, 0.18), 0 12px 24px -8px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .chinese-watermark {
+      font-family: 'Noto Serif SC', serif;
+      user-select: none;
+      pointer-events: none;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #D8E2EA;
+      border-radius: 9999px;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/></head>
+<body class="h-full bg-rice font-sans text-porcelain antialiased flex flex-col md:flex-row overflow-hidden relative">
+<!-- Left Sidebar -->
+<aside class="w-full md:w-64 bg-cardBg border-r border-borderSubtle flex flex-col justify-between shrink-0 z-20 h-auto md:h-full shadow-sm">
+<!-- Top Branding & Navigation -->
+<div>
+<!-- Brand Logo / Seal -->
+<div class="p-6 border-b border-borderSubtle flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-seal flex items-center justify-center text-white shadow-sm ring-2 ring-seal/20">
+<span class="font-serifSc text-xl font-bold tracking-tight">华</span>
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<span class="font-bold text-base tracking-tight text-porcelain">KUMA HuaYu</span>
+</div>
+<span class="inline-block text-[10px] font-semibold uppercase tracking-wider text-seal bg-seal/10 px-2 py-0.5 rounded">Admin Portal</span>
+</div>
+</div>
+</div>
+<!-- Section Navigation -->
+<div class="px-4 py-6">
+<p class="px-3 text-[11px] font-bold uppercase tracking-wider text-porcelain/50 mb-3">Menú Principal</p>
+<nav class="space-y-1.5">
+<!-- Active Menu Item: Gestión de Usuarios -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-porcelain text-white font-medium shadow-sm transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-lg">group</span>
+<span class="text-sm">Gestión de Usuarios</span>
+</a>
+<!-- Inactive Menu Item: Configuración IA -->
+<a class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-porcelain/80 hover:bg-porcelain-light/60 hover:text-porcelain font-medium transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-lg text-porcelain/60">neurology</span>
+<span class="text-sm">Configuración IA</span>
+</a>
+<!-- Complementary Admin Route -->
+</nav>
+</div>
+</div>
+<!-- Bottom User / Logout Section -->
+<div class="p-4 border-t border-borderSubtle bg-cardBg/80">
+<div class="flex items-center space-x-3 px-2 py-2 mb-2 rounded-lg bg-rice/60">
+<div class="w-8 h-8 rounded-full bg-porcelain/15 flex items-center justify-center text-porcelain font-bold text-xs">
+          AD
+        </div>
+<div class="overflow-hidden flex-1">
+<p class="text-xs font-semibold text-porcelain truncate">Admin Master</p>
+<p class="text-[11px] text-porcelain/60 truncate">admin@huayu.edu</p>
+</div>
+</div>
+<!-- Botón de Cerrar Sesión en esquina inferior -->
+<button class="w-full flex items-center justify-center space-x-2 px-3.5 py-2.5 rounded-xl border border-borderSubtle text-porcelain/80 hover:text-seal hover:border-seal/30 hover:bg-seal/5 text-xs font-semibold transition-all duration-150">
+<span class="material-symbols-outlined text-base">logout</span>
+<span class="">Cerrar Sesión</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Layout -->
+<main class="flex-1 flex flex-col h-full overflow-y-auto relative custom-scrollbar"><div class="flex flex-col w-full relative min-w-0">
+<!-- Subtle Traditional Watermark Background (Aesthetic Cultural Motif) -->
+<div class="chinese-watermark absolute right-6 top-10 text-[180px] font-bold text-primary/5 select-none pointer-events-none leading-none z-0 hidden lg:block">
+    华语
+  </div>
+<div class="chinese-watermark absolute left-1/3 bottom-12 text-[140px] font-bold text-secondary/5 select-none pointer-events-none leading-none z-0 hidden xl:block">
+    智核
+  </div>
+<!-- Internal Workspace Header with Dual-tab Pill Switcher & Global Health Metric -->
+<header class="relative z-10 px-6 py-6 md:px-8 border-b border-surface-container-highest/60 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+<div>
+<div class="flex items-center space-x-2.5 mb-1.5">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-label font-semibold tracking-wide bg-surface-container-highest text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+          KUMA-SYS-v2.4
+        </span>
+<span class="text-xs text-on-surface-variant font-label">CLUSTER-ECU-01</span>
+</div>
+<h1 class="text-2xl md:text-3xl font-headline font-bold text-primary tracking-tight">
+        Panel de Control &amp; Consola Técnica
+      </h1>
+<p class="text-xs md:text-sm text-on-surface-variant font-body mt-0.5 max-w-2xl">
+        Gobernanza pedagógica, directorio de usuarios y orquestación de inferencia local para tutoría en mandarín.
+      </p>
+</div>
+<!-- Quick Navigation Pill Tabs -->
+<div class="flex items-center space-x-2 bg-surface-container-high/60 p-1.5 rounded-xl shadow-inner self-start lg:self-center">
+<button class="flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-headline font-semibold transition-all duration-200 bg-primary text-on-primary shadow-sm" id="tab-users-btn" onclick="switchTab('users')">
+<span class="material-symbols-outlined text-base">group</span>
+<span>Gestión de Usuarios</span>
+<span class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-label bg-white/20 text-white">HU-23</span>
+</button>
+<button class="flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:text-primary transition-all duration-200" id="tab-ai-btn" onclick="switchTab('ai')">
+<span class="material-symbols-outlined text-base">neurology</span>
+<span>Configuración IA</span>
+<span class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-label bg-surface-container text-on-surface-variant">HU-24</span>
+</button>
+</div>
+</header>
+<!-- WORKBENCH BODY -->
+<div class="relative z-10 p-6 md:p-8 space-y-8 flex-1">
+<!-- ========================================== -->
+<!-- SECTION 1: GESTIÓN DE USUARIOS (HU-23)     -->
+<!-- ========================================== -->
+<section class="space-y-6 block" id="section-users">
+<!-- Top Action Bar & Telemetry Status -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-lowest p-5 rounded-2xl shadow-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-2.5">
+<h2 class="text-lg font-headline font-bold text-primary">Directorio Académico</h2>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+              Directorio Sincronizado — PostgreSQL Local
+            </span>
+</div>
+<p class="text-xs text-on-surface-variant font-body">
+            Control centralizado de credenciales, roles pedagógicos y mitigación de acceso docente y estudiantil.
+          </p>
+</div>
+<button class="inline-flex items-center justify-center space-x-2 bg-secondary hover:bg-secondary-container text-on-secondary px-5 py-2.5 rounded-xl font-headline font-semibold text-xs tracking-wide shadow-md hover:shadow-lg transition-all duration-150 active:scale-95 shrink-0" onclick="toggleModal(true)">
+<span class="material-symbols-outlined text-base">person_add</span>
+<span>+ Nuevo Usuario</span>
+</button>
+</div>
+<!-- Filters & Summary Bar -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
+<!-- Search Input -->
+<div class="md:col-span-6 lg:col-span-7 relative">
+<span class="material-symbols-outlined absolute left-3.5 top-2.5 text-on-surface-variant/60 text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/40 text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all" placeholder="Buscar por nombre, cédula o correo institucional..." type="text"/>
+</div>
+<!-- Role Filter Dropdown -->
+<div class="md:col-span-3 lg:col-span-3 relative">
+<select class="w-full pl-3.5 pr-8 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/40 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all appearance-none cursor-pointer font-medium">
+<option value="all">Todos los roles (Estudiante, Docente, Admin)</option>
+<option value="student">Estudiantes</option>
+<option value="teacher">Docentes</option>
+<option value="admin">Administradores</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant pointer-events-none text-base">expand_more</span>
+</div>
+<!-- Total Counter Badge -->
+<div class="md:col-span-3 lg:col-span-2 flex items-center justify-end">
+<div class="w-full md:w-auto px-4 py-2 bg-surface-container-low rounded-xl flex items-center justify-between md:justify-center gap-2 text-xs font-headline font-semibold text-primary">
+<span class="text-on-surface-variant font-normal">Registros:</span>
+<span class="font-label text-sm text-primary font-bold">3 usuarios</span>
+</div>
+</div>
+</div>
+<!-- Immutable Structured Data Table -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-surface-container-highest text-[11px] font-label font-bold text-on-surface-variant tracking-wider uppercase">
+<th class="py-3.5 px-6">Nombre &amp; Apellido</th>
+<th class="py-3.5 px-4">Cédula</th>
+<th class="py-3.5 px-4">Correo Institucional</th>
+<th class="py-3.5 px-4">Rol Académico</th>
+<th class="py-3.5 px-4">Estado</th>
+<th class="py-3.5 px-6 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest/60 text-xs font-body">
+<!-- Row 1: Carlos Bernabé -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-lg bg-primary/10 text-primary font-headline font-bold flex items-center justify-center text-xs">
+                      CB
+                    </div>
+<div>
+<p class="font-headline font-semibold text-primary">Carlos Bernabé</p>
+<p class="text-[10px] text-on-surface-variant font-label">ID: USR-8841-ES</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 font-label font-medium text-on-surface">
+                  0987654321
+                </td>
+<td class="py-4 px-4 text-on-surface-variant font-label">
+                  carlos@huayu.edu
+                </td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-blue-50 text-primary border border-primary/20">
+                    Estudiante
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Activo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+<button class="px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold text-primary hover:bg-surface-container transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">edit</span>
+                    Editar
+                  </button>
+<button class="px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold text-secondary hover:bg-secondary/10 transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">block</span>
+                    Bloquear
+                  </button>
+</td>
+</tr>
+<!-- Row 2: David Unaucho -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-lg bg-emerald-600/10 text-emerald-700 font-headline font-bold flex items-center justify-center text-xs">
+                      DU
+                    </div>
+<div>
+<p class="font-headline font-semibold text-primary">David Unaucho</p>
+<p class="text-[10px] text-on-surface-variant font-label">ID: USR-4102-DOC</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 font-label font-medium text-on-surface">
+                  0912345678
+                </td>
+<td class="py-4 px-4 text-on-surface-variant font-label">
+                  aparra@huayu.edu
+                </td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-300">
+                    Docente
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    Activo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+<button class="px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold text-primary hover:bg-surface-container transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">edit</span>
+                    Editar
+                  </button>
+<button class="px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold text-secondary hover:bg-secondary/10 transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">block</span>
+                    Bloquear
+                  </button>
+</td>
+</tr>
+<!-- Row 3: Admin Master -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-secondary/5">
+<td class="py-4 px-6">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-lg bg-secondary/10 text-secondary font-headline font-bold flex items-center justify-center text-xs">
+                      AM
+                    </div>
+<div>
+<p class="font-headline font-semibold text-secondary">Admin Master</p>
+<p class="text-[10px] text-on-surface-variant font-label">ID: ROOT-SEC-001</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 font-label font-medium text-on-surface">
+                  0900000000
+                </td>
+<td class="py-4 px-4 text-on-surface-variant font-label">
+                  admin@huayu.edu
+                </td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-secondary/10 text-secondary border border-secondary/20">
+                    Admin
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-50 text-error">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                    Bloqueado
+                  </span>
+</td>
+<td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+<button class="px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">lock_open</span>
+                    Desbloquear
+                  </button>
+<button class="px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:bg-surface-container transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">history</span>
+                    Historial
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer pagination/audit metadata -->
+<div class="px-6 py-3 bg-surface-container/50 border-t border-surface-container-highest/60 flex items-center justify-between text-xs text-on-surface-variant">
+<span class="font-label text-[11px]">Mostrando 3 de 3 cuentas indexadas</span>
+<span class="font-body text-[11px]">Copia de seguridad local: <strong class="font-label">Hoy 04:00 AM</strong></span>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- SECTION 2: CONFIGURACIÓN IA LOCAL (HU-24)  -->
+<!-- ========================================== -->
+<section class="space-y-6 hidden" id="section-ai">
+<!-- AI Service Status Hero Banner -->
+<div class="bg-primary text-on-primary p-6 rounded-2xl shadow-md relative overflow-hidden">
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+</span>
+<span class="text-xs font-label uppercase tracking-widest text-on-primary/80">Inferencia de Borde Activa</span>
+</div>
+<h2 class="text-xl md:text-2xl font-headline font-bold">Motor Local RAG &amp; Fonética de Alta Fidelidad</h2>
+<p class="text-xs md:text-sm text-on-primary-container max-w-xl">
+              Latencia RAG 42ms · GPU Local Activa (NVIDIA RTX 4090 / CUDA 12.4) · Whisper Large-v3 montado en memoria.
+            </p>
+</div>
+<div class="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-xl backdrop-blur-sm self-start md:self-auto">
+<span class="material-symbols-outlined text-3xl text-emerald-400">verified</span>
+<div>
+<p class="text-[10px] font-label uppercase tracking-wider text-white/70">Estado del Servicio</p>
+<p class="text-xs font-headline font-bold text-white">Conexión Estable (200 OK)</p>
+</div>
+</div>
+</div>
+<!-- Decorative background glyph -->
+<span class="chinese-watermark absolute right-6 -bottom-8 text-9xl text-white/5 font-bold select-none pointer-events-none">
+          神
+        </span>
+</div>
+<!-- Config Cards Grid (Bento Grid) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Card 1: Motor RAG (AnythingLLM / Ollama) -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm space-y-5">
+<div class="flex items-center justify-between border-b border-surface-container-highest/60 pb-4">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">database</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-base text-primary">Motor RAG (AnythingLLM / Ollama)</h3>
+<p class="text-[11px] text-on-surface-variant font-body">Recuperación semántica aumentada para gramática HSK 1-6</p>
+</div>
+</div>
+<span class="text-[10px] font-label px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">LLM PORT</span>
+</div>
+<form class="space-y-4" onsubmit="event.preventDefault()">
+<!-- Endpoint URL -->
+<div>
+<label class="block text-xs font-label font-bold text-primary mb-1.5 uppercase tracking-wider">
+                URL del Endpoint Local
+              </label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/50 text-on-surface font-label focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all" type="text" value="http://127.0.0.1:3001/api/v1/rag"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant/40 text-base">link</span>
+</div>
+<p class="mt-1 text-[11px] text-on-surface-variant">Ruta interna del backend local para la vectorización de lecciones.</p>
+</div>
+<!-- Latency Timeout -->
+<div>
+<label class="block text-xs font-label font-bold text-primary mb-1.5 uppercase tracking-wider">
+                Timeout de Latencia (Segundos)
+              </label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/50 text-on-surface font-label focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all" type="text" value="3.0 segundos"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant/40 text-base">timer</span>
+</div>
+<p class="mt-1 text-[11px] text-on-surface-variant">Límite antes del fallback pedagógico con respuestas fijas.</p>
+</div>
+</form>
+</div>
+<!-- Card 2: Motor de Audio Fonético (Whisper Large-v3) -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm space-y-5">
+<div class="flex items-center justify-between border-b border-surface-container-highest/60 pb-4">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">record_voice_over</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-base text-primary">Motor de Audio Fonético (Whisper Large-v3)</h3>
+<p class="text-[11px] text-on-surface-variant font-body">Evaluación de tonos (声调), pinyin y prosodia de estudiantes</p>
+</div>
+</div>
+<span class="text-[10px] font-label px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">ASR MODEL</span>
+</div>
+<form class="space-y-4" onsubmit="event.preventDefault()">
+<!-- API Key / Secret Token -->
+<div>
+<label class="block text-xs font-label font-bold text-primary mb-1.5 uppercase tracking-wider">
+                API Key / Token de Autenticación
+              </label>
+<div class="relative">
+<input class="w-full pl-3.5 pr-20 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/50 text-on-surface font-label focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all" id="whisper-token" type="password" value="sk-whisp-huayu-9840293847291039485"/>
+<div class="absolute right-2 top-1.5 flex items-center space-x-1">
+<button class="p-1 text-on-surface-variant/60 hover:text-primary transition-colors" onclick="toggleTokenVisibility()" type="button">
+<span class="material-symbols-outlined text-base" id="token-eye-icon">visibility</span>
+</button>
+<button class="p-1 text-on-surface-variant/60 hover:text-primary transition-colors" onclick="copyTokenAlert()" type="button">
+<span class="material-symbols-outlined text-base">content_copy</span>
+</button>
+</div>
+</div>
+<p class="mt-1 text-[11px] text-on-surface-variant">Clave segura para el pipeline gRPC del servicio de transcripción de audio.</p>
+</div>
+<!-- In-line telemetry metrics -->
+<div class="grid grid-cols-2 gap-3 pt-2">
+<div class="p-3 bg-surface-container rounded-xl">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Tasa de Inferencia</span>
+<p class="font-label text-sm font-bold text-primary mt-0.5">0.18s / fonema</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Precisión Tonal</span>
+<p class="font-label text-sm font-bold text-secondary mt-0.5">99.4% HSK 1-3</p>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- Action Footer for AI Configuration -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex items-center justify-between">
+<span class="text-xs text-on-surface-variant font-body">
+          Última actualización de pesos: <strong class="font-label text-primary">2025-05-18 10:14:02 UTC</strong>
+</span>
+<div class="flex items-center space-x-3">
+<button class="px-4 py-2 rounded-xl text-xs font-headline font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">
+            Restablecer Valores
+          </button>
+<button class="inline-flex items-center space-x-1.5 bg-secondary hover:bg-secondary-container text-on-secondary px-5 py-2.5 rounded-xl font-headline font-semibold text-xs shadow-md transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-base">save</span>
+<span>Guardar Cambios</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- ======================================================== -->
+<!-- MODAL: REGISTRO DE USUARIO (HU-23) — Interactive Overlay -->
+<!-- ======================================================== -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/40 backdrop-blur-sm transition-opacity hidden" id="modal-container">
+<!-- Modal Dialog Window -->
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden border border-outline-variant/40 animate-in fade-in zoom-in-95 duration-200">
+<!-- Top Decorative Ceramic Accent Line -->
+<div class="h-1.5 w-full bg-gradient-to-r from-primary via-primary-container to-secondary"></div>
+<!-- Modal Header -->
+<div class="p-6 border-b border-surface-container-highest/80 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">person_add</span>
+</div>
+<div>
+<h2 class="text-lg font-headline font-bold text-primary tracking-tight">Nuevo Usuario</h2>
+<p class="text-[11px] text-on-surface-variant font-body">Crea una credencial institucional en el directorio académico</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded-lg hover:bg-surface-container transition-colors" onclick="toggleModal(false)">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- Modal Form Body -->
+<form class="p-6 space-y-4" onsubmit="event.preventDefault()">
+<!-- Campo: Nombres y Apellidos -->
+<div>
+<label class="block text-xs font-headline font-bold text-primary mb-1">
+            Nombres y Apellidos <span class="text-secondary">*</span>
+</label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/60 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all" placeholder="Ej. Juan Pérez" type="text" value="Zhang Wei Morales"/>
+</div>
+</div>
+<!-- Campo: Cédula de Identidad (Con estado explícito de Error #ba1a1a / #C8102E) -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<label class="text-xs font-headline font-bold text-primary">
+              Cédula de Identidad <span class="text-secondary">*</span>
+</label>
+<span class="text-[10px] text-on-surface-variant font-label">Solo números (10 dígitos)</span>
+</div>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-red-50/30 rounded-xl border-2 border-secondary text-secondary font-label font-bold focus:outline-none focus:ring-1 focus:ring-secondary shadow-sm transition-all" type="text" value="1098452310"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-secondary text-base">error</span>
+</div>
+<!-- Explicit Error Warning Banner -->
+<p class="mt-1.5 text-[11px] font-headline font-bold text-secondary flex items-center space-x-1">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span>Esta cuenta ya existe en el directorio local</span>
+</p>
+</div>
+<!-- Campo: Correo Institucional -->
+<div>
+<label class="block text-xs font-headline font-bold text-primary mb-1">
+            Correo Institucional <span class="text-secondary">*</span>
+</label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/60 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all font-label" placeholder="nombre@huayu.edu" type="email" value="zhang.wei@huayu.edu"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant/40 text-base">mail</span>
+</div>
+</div>
+<!-- Dropdown: Rol de Acceso -->
+<div>
+<label class="block text-xs font-headline font-bold text-primary mb-1">
+            Rol de Acceso <span class="text-secondary">*</span>
+</label>
+<div class="relative">
+<select class="w-full px-3.5 py-2.5 text-xs bg-surface-container-lowest rounded-xl border border-outline-variant/60 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all appearance-none cursor-pointer font-medium">
+<option selected="" value="Estudiante">Estudiante (Acceso a lecciones, SRS y tareas)</option>
+<option value="Docente">Docente (Gestión pedagógica y calificaciones)</option>
+<option value="Admin">Admin (Control total del sistema y analíticas)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant pointer-events-none text-base">expand_more</span>
+</div>
+</div>
+<!-- Modal Actions Footer -->
+<div class="pt-4 border-t border-surface-container-highest/80 flex items-center justify-end space-x-3">
+<button class="px-4 py-2 rounded-xl text-xs font-headline font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" onclick="toggleModal(false)" type="button">
+            Cancelar
+          </button>
+<button class="inline-flex items-center space-x-1.5 bg-secondary hover:bg-secondary-container text-on-secondary px-5 py-2.5 rounded-xl font-headline font-semibold text-xs shadow-md hover:shadow-lg transition-all active:scale-95" type="submit">
+<span class="material-symbols-outlined text-sm">check</span>
+<span>Guardar</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Client-side Interactive Logic -->
+<script>
+    function switchTab(tab) {
+      const usersSection = document.getElementById('section-users');
+      const aiSection = document.getElementById('section-ai');
+      const usersBtn = document.getElementById('tab-users-btn');
+      const aiBtn = document.getElementById('tab-ai-btn');
+
+      if (tab === 'users') {
+        usersSection.classList.remove('hidden');
+        aiSection.classList.add('hidden');
+        
+        usersBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-headline font-semibold transition-all duration-200 bg-primary text-on-primary shadow-sm";
+        aiBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:text-primary transition-all duration-200";
+      } else {
+        usersSection.classList.add('hidden');
+        aiSection.classList.remove('hidden');
+
+        aiBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-headline font-semibold transition-all duration-200 bg-primary text-on-primary shadow-sm";
+        usersBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-headline font-semibold text-on-surface-variant hover:text-primary transition-all duration-200";
+      }
+    }
+
+    function toggleModal(show) {
+      const modal = document.getElementById('modal-container');
+      if (show) {
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function toggleTokenVisibility() {
+      const tokenInput = document.getElementById('whisper-token');
+      const icon = document.getElementById('token-eye-icon');
+      if (tokenInput.type === 'password') {
+        tokenInput.type = 'text';
+        icon.innerText = 'visibility_off';
+      } else {
+        tokenInput.type = 'password';
+        icon.innerText = 'visibility';
+      }
+    }
+
+    function copyTokenAlert() {
+      const tokenInput = document.getElementById('whisper-token');
+      navigator.clipboard.writeText(tokenInput.value).then(() => {
+        alert('Token copiado al portapapeles');
+      });
+    }
+  </script>
+</div></main>
+<!-- Componente Superpuesto (Modal Flotante con Level 3 Shadow) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-porcelain/30 backdrop-blur-sm transition-opacity">
+<!-- Modal Card (fondo #FAF8F5, sombra level 3, borde sutil #D8E2EA) -->
+<div class="w-full max-w-lg bg-cardBg border border-borderSubtle rounded-[20px] shadow-modal overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative">
+<!-- Subtle top decorative bar in Porcelain & Seal -->
+<div class="h-1.5 w-full bg-gradient-to-r from-porcelain via-porcelain to-seal"></div>
+<!-- Header del Modal -->
+<div class="p-6 border-b border-borderSubtle flex items-center justify-between">
+<div class="flex items-center space-x-2.5">
+<div class="w-7 h-7 rounded-md bg-seal/10 text-seal flex items-center justify-center">
+<span class="material-symbols-outlined text-base">person_add</span>
+</div>
+<h2 class="text-lg font-bold text-porcelain tracking-tight font-sans">Nuevo Usuario</h2>
+</div>
+<!-- Close button -->
+<button class="text-porcelain/40 hover:text-porcelain p-1 rounded-lg hover:bg-rice transition-colors">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- Cuerpo del Formulario -->
+<form class="p-6 space-y-4" onsubmit="event.preventDefault()">
+<!-- Campo: Nombres -->
+<div>
+<label class="block text-xs font-semibold text-porcelain mb-1.5">
+            Nombres y Apellidos <span class="text-seal">*</span>
+</label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-cardBg rounded-xl border border-borderSubtle text-porcelain placeholder-porcelain/40 focus:outline-none focus:border-porcelain focus:ring-1 focus:ring-porcelain shadow-sm transition-all" placeholder="Ej. Juan Pérez" type="text" value="Zhang Wei Morales"/>
+</div>
+</div>
+<!-- Campo: Cédula con Mensaje de Error Rojo #ba1a1a -->
+<div>
+<label class="block text-xs font-semibold text-porcelain mb-1.5 flex justify-between">
+<span class="">Cédula de Identidad <span class="text-seal">*</span></span>
+<span class="text-[10px] text-porcelain/50">Solo números</span>
+</label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-cardBg rounded-xl border border-errorRed text-errorRed focus:outline-none focus:ring-1 focus:ring-errorRed shadow-sm transition-all font-mono" type="text" value="1098452310"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-errorRed text-base">error</span>
+</div>
+<!-- Mensaje de error requerido -->
+<p class="mt-1.5 text-[11px] font-medium text-errorRed flex items-center space-x-1">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span class="">Esta cuenta ya existe</span>
+</p>
+</div>
+<!-- Campo: Correo Institucional -->
+<div>
+<label class="block text-xs font-semibold text-porcelain mb-1.5">
+            Correo Institucional <span class="text-seal">*</span>
+</label>
+<div class="relative">
+<input class="w-full px-3.5 py-2.5 text-xs bg-cardBg rounded-xl border border-borderSubtle text-porcelain placeholder-porcelain/40 focus:outline-none focus:border-porcelain focus:ring-1 focus:ring-porcelain shadow-sm transition-all" placeholder="nombre@huayu.edu" type="email" value="zhang.wei@huayu.edu"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-porcelain/30 text-base">mail</span>
+</div>
+</div>
+<!-- Dropdown para "Rol" (Estudiante, Docente, Admin) -->
+<div>
+<label class="block text-xs font-semibold text-porcelain mb-1.5">
+            Rol de Acceso <span class="text-seal">*</span>
+</label>
+<div class="relative">
+<select class="w-full px-3.5 py-2.5 text-xs bg-cardBg rounded-xl border border-borderSubtle text-porcelain focus:outline-none focus:border-porcelain focus:ring-1 focus:ring-porcelain shadow-sm transition-all appearance-none cursor-pointer">
+<option selected="" value="Estudiante">Estudiante (Acceso a lecciones, SRS y tareas)</option>
+<option value="Docente">Docente (Gestión pedagógica y calificaciones)</option>
+<option value="Admin">Admin (Control total del sistema y analíticas)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-porcelain/40 pointer-events-none text-base">expand_more</span>
+</div>
+</div>
+<!-- Footer / Acciones del Modal: Botón Guardar en #C8102E -->
+<div class="pt-4 border-t border-borderSubtle flex items-center justify-end space-x-3">
+<button class="px-4 py-2 rounded-xl text-xs font-semibold text-porcelain/70 hover:text-porcelain hover:bg-rice transition-colors" type="button">
+            Cancelar
+          </button>
+<button class="inline-flex items-center space-x-1.5 bg-seal hover:bg-seal-hover text-white px-5 py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition-all duration-150 active:scale-95" type="submit">
+<span class="">Guardar</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</body></html>
