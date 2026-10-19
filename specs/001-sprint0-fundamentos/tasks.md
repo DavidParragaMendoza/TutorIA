@@ -14,7 +14,7 @@ Este documento detalla la secuencia ordenada de tareas que la IA debe ejecutar p
   - Crear un entorno virtual aislado (`python3.12 -m venv venv`) dentro del directorio `/backend` para congelar versiones y evitar conflictos de librerías globales.
   - Activar el entorno virtual antes de instalar o ejecutar cualquier paquete Python.
 
-- [ ] **Tarea 1.3: Configurar Dependencias del Backend**
+- [x] **Tarea 1.3: Configurar Dependencias del Backend**
   - Crear el archivo `backend/requirements.txt` especificando las librerías oficiales (`fastapi`, `sqlmodel`, `pymysql`, `uvicorn`, `pytest`, `python-dotenv`).
   - Instalar las dependencias dentro del entorno virtual activo.
 

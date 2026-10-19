@@ -3,3 +3,4 @@ sqlmodel
 pymysql
 pytest
 uvicorn
+python-dotenv
