@@ -1,0 +1,245 @@
+<!DOCTYPE html><html class="h-full" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>KUMA HuáYu · Inicio de Sesión</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;family=Noto+Serif+SC:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#31302b",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#1f4e79",
+            "surface": "#fdf9f0",
+            "on-surface": "#1c1c16",
+            "background": "#fdf9f0",
+            "secondary-fixed": "#ffdad8",
+            "secondary": "#bb0027",
+            "surface-bright": "#fdf9f0",
+            "surface-tint": "#35618d",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#e6e2d9",
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#a6bedd",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f7f3ea",
+            "outline-variant": "#c2c7d0",
+            "primary": "#00375e",
+            "surface-container-high": "#ece8df",
+            "on-primary-fixed": "#001d35",
+            "inverse-primary": "#a0cafc",
+            "on-tertiary-fixed-variant": "#314863",
+            "tertiary-fixed-dim": "#b0c9e8",
+            "on-secondary-fixed": "#410007",
+            "surface-container": "#f1eee5",
+            "on-secondary-container": "#fffbff",
+            "on-primary-fixed-variant": "#184974",
+            "tertiary-fixed": "#d1e4ff",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "secondary-fixed-dim": "#ffb3b1",
+            "on-secondary-fixed-variant": "#92001c",
+            "primary-fixed": "#d1e4ff",
+            "tertiary": "#1e3650",
+            "on-tertiary-fixed": "#011d35",
+            "on-surface-variant": "#42474f",
+            "inverse-on-surface": "#f4f0e7",
+            "surface-dim": "#dddad1",
+            "error": "#ba1a1a",
+            "tertiary-container": "#364d68",
+            "secondary-container": "#e0283c",
+            "outline": "#72777f",
+            "primary-fixed-dim": "#a0cafc",
+            "on-background": "#1c1c16",
+            "on-primary-container": "#95bff1",
+            "surface-container-highest": "#e6e2d9"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "display": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["JetBrains Mono", "monospace"],
+            "hanzi-serif": ["Noto Serif SC", "serif"],
+            "hanzi": ["Noto Sans SC", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined[data-weight="fill"] {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Subtle watermark calligraphy texture */
+    .shanshui-watermark {
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col justify-between relative selection:bg-secondary-fixed selection:text-on-secondary-fixed overflow-x-hidden">
+<!-- ATMOSPHERIC BACKGROUND WATERMARK: SHANSHUI / CHINESE CALLIGRAPHIC ESSENCE -->
+<div class="fixed inset-0 shanshui-watermark overflow-hidden flex items-center justify-center opacity-100 z-0 pointer-events-none">
+<!-- Traditional Shanshui Landscape / Brush Calligraphy Watermark -->
+<svg class="absolute w-[120vw] md:w-[95vw] max-w-none text-primary-container opacity-[0.045] transform -translate-y-6" fill="none" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+<!-- Mountain silhouettes and ink-wash gradations -->
+<path d="M-50 780 C180 620, 290 690, 480 610 C650 540, 780 640, 960 560 C1150 470, 1260 580, 1450 510 L1450 950 L-50 950 Z" fill="currentColor"></path>
+<path d="M120 620 C260 480, 390 520, 540 430 C720 330, 890 440, 1080 360 C1220 300, 1340 380, 1480 320 L1480 900 L120 900 Z" fill="currentColor" opacity="0.6"></path>
+<path d="M280 470 C410 320, 560 360, 690 280 C840 190, 980 260, 1140 210 C1240 180, 1320 220, 1420 180 L1420 850 L280 850 Z" fill="currentColor" opacity="0.35"></path>
+<!-- Classical Seal Stamp Silhouette in background -->
+<text fill="currentColor" font-family="'Noto Serif SC', serif" font-size="110" font-weight="700" opacity="0.5" x="110" y="320">博学笃行</text>
+<text fill="currentColor" font-family="'Noto Serif SC', serif" font-size="44" font-weight="400" opacity="0.35" x="110" y="440">格物致知 · 华语深研</text>
+<!-- Stylized ink-mist mist ripples -->
+<path d="M50 720 Q 300 690, 600 730 T 1150 710 T 1450 740" fill="none" opacity="0.25" stroke="currentColor" stroke-dasharray="12 18" stroke-width="1.5"></path>
+<path d="M150 760 Q 400 740, 750 770 T 1300 750" fill="none" opacity="0.2" stroke="currentColor" stroke-dasharray="8 14" stroke-width="1"></path>
+</svg>
+</div>
+<!-- TOP APP BAR / BRAND HEADER -->
+<header class="relative z-10 w-full px-6 py-5 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
+<!-- Brand Identity: Yìnní Seal + Product Wordmark -->
+<div class="flex items-center gap-3 group"><div class="w-10 h-10 bg-secondary rounded-[3px] shadow-sm flex items-center justify-center p-1 border border-secondary-container transition-transform duration-200 group-hover:scale-105" title="TutorIA · 学"><span class="font-hanzi font-bold text-surface-container-lowest text-lg leading-none select-none">学</span></div><div class="flex flex-col"><div class="flex items-center gap-1.5"><span class="font-headline text-lg font-bold tracking-tight text-[#1f4e79]">Tutor<span class="text-secondary">IA</span></span><span class="text-xs px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label border border-outline-variant/40">AI</span></div><span class="text-[11px] font-hanzi font-medium tracking-wide text-on-surface-variant">Plataforma Inteligente de Mandarín · 智能导师</span></div></div>
+<!-- Right Utility Navigation Links (Subtle & Non-Intrusive) -->
+<div class="flex items-center gap-4 text-xs font-headline">
+<a class="hidden sm:inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors py-1.5 px-3 rounded-lg hover:bg-surface-container-high/60" href="#">
+<span class="material-symbols-outlined text-[17px]">language</span>
+<span class="">Español / 中文</span>
+</a>
+<a class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors py-1.5 px-3 rounded-lg hover:bg-surface-container-high/60" href="#">
+<span class="material-symbols-outlined text-[17px]">help_outline</span>
+<span class="">Ayuda</span>
+</a>
+</div>
+</header>
+<!-- MAIN CANVAS: CENTERED AUTHENTICATION CARD -->
+<main class="relative z-10 flex-grow flex items-center justify-center px-4 py-8 sm:py-12">
+<div class="w-full max-w-[430px]">
+<!-- Porcelain Card Container (Porcelana Clara #FAF8F5 with hairline boundary) -->
+<div class="bg-[#faf8f5] rounded-xl border border-[#d8e2ea] shadow-[0_8px_30px_-6px_rgba(31,78,121,0.06),0_2px_10px_-2px_rgba(0,0,0,0.02)] p-7 sm:p-9 transition-all">
+<!-- Academic Header Block -->
+<div class="text-center mb-8">
+<!-- Classical Seal Tag Accent -->
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/50 text-[11px] font-label text-primary-container mb-3 tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span>
+<span class="">PORTAL INSTITUCIONAL SRS</span>
+</div>
+<h1 class="font-headline text-2xl sm:text-[28px] font-bold text-primary tracking-tight leading-snug">
+            Inicio de sesión
+          </h1>
+<p class="font-body text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed">
+            Portal Institucional de Mandarín Estándar
+          </p>
+</div>
+<!-- Authentication Form -->
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<!-- Field 1: Identifier Input -->
+<div>
+<label class="block font-headline text-xs font-semibold text-on-surface mb-2 tracking-normal" for="identifier">
+              Usuario o Correo Institucional
+            </label>
+<div class="relative rounded-lg shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[19px]">alternate_email</span>
+</div>
+<input class="block w-full pl-10 pr-3.5 py-2.5 text-sm bg-surface-container-lowest text-on-surface placeholder:text-outline-variant border border-[#d8e2ea] rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/15 transition-all font-body" id="identifier" name="identifier" placeholder="ej. carlos@huayu.edu o cédula" required="" type="text">
+</div>
+</div>
+<!-- Field 2: Password Input -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="block font-headline text-xs font-semibold text-on-surface tracking-normal" for="password">
+                Contraseña de registro
+              </label>
+<a class="text-xs font-headline font-medium text-primary-container hover:text-primary transition-colors hover:underline" href="#">
+                ¿Olvidó su contraseña?
+              </a>
+</div>
+<div class="relative rounded-lg shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[19px]">lock</span>
+</div>
+<input class="block w-full pl-10 pr-11 py-2.5 text-sm bg-surface-container-lowest text-on-surface placeholder:text-outline-variant border border-[#d8e2ea] rounded-lg focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/15 transition-all font-body tracking-wider" id="password" name="password" placeholder="••••••••••••" required="" type="password">
+<button aria-label="Alternar visibilidad de contraseña" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-on-surface-variant hover:text-primary transition-colors" id="togglePassword" type="button">
+<span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Session Persistence Checkbox -->
+
+<!-- Primary CTA Button: Vermilion Seal (#C8102E) -->
+<div class="pt-2">
+<button class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-secondary hover:bg-[#ad0d26] active:bg-[#960920] text-on-secondary font-headline font-bold text-sm shadow-[0_2px_8px_rgba(200,16,46,0.24)] hover:shadow-[0_4px_14px_rgba(200,16,46,0.32)] transition-all duration-200 cursor-pointer active:scale-[0.99]" type="submit">
+<span class="">Ingresar</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Divider with Calligraphic Seal Motif -->
+
+<!-- Auxiliary Institutional Auth Link -->
+
+<!-- New Student Prompt -->
+
+</div>
+<!-- Small Security Verification Badge -->
+<div class="mt-4 flex items-center justify-center gap-1.5 text-on-surface-variant/75 text-[11px]">
+<span class="material-symbols-outlined text-[14px] text-primary">verified_user</span>
+<span class="">Canal cifrado SSL de 256 bits · Red Académica KUMA</span>
+</div>
+</div>
+</main>
+<!-- MINIMAL INSTITUTIONAL FOOTER -->
+<footer class="relative z-10 w-full py-6 px-6 border-t border-outline-variant/30 text-center text-xs font-body text-on-surface-variant">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px]">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="font-medium">© 2024 KUMA HuáYu (学语文中)</span>
+<span class="text-outline-variant">·</span>
+<span class="">Sistema Académico</span>
+</div>
+<div class="flex items-center gap-5">
+<a class="hover:text-primary transition-colors" href="#">Privacidad</a>
+<a class="hover:text-primary transition-colors" href="#">Términos Institucionales</a>
+<a class="hover:text-primary transition-colors" href="#">Contacto de Soporte</a>
+</div>
+</div>
+</footer>
+<!-- Light Vanilla Script for Password Toggle and Refined Feedback -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const togglePasswordBtn = document.getElementById('togglePassword');
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+
+      if (togglePasswordBtn && passwordInput && eyeIcon) {
+        togglePasswordBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.type === 'password';
+          passwordInput.type = isPassword ? 'text' : 'password';
+          eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        });
+      }
+    });
+  </script>
+
+
+</body></html>

@@ -18,9 +18,8 @@ Este documento detalla la secuencia ordenada de tareas que la IA debe ejecutar p
   - Crear el archivo `backend/requirements.txt` especificando las librerías oficiales (`fastapi`, `sqlmodel`, `pymysql`, `uvicorn`, `pytest`, `python-dotenv`).
   - Instalar las dependencias dentro del entorno virtual activo.
 
-- [ ] **Tarea 1.4: Inicializar Proyecto Frontend en React y Tailwind CSS**
+- [x] **Tarea 1.4: Inicializar Proyecto Frontend en React y Tailwind CSS**
   - Inicializar la estructura del proyecto React dentro de `/frontend`.
-  - Configurar Tailwind CSS integrando la paleta de colores institucional Porcelana y Vermellón adaptada de las especificaciones de diseño.
 
 ---
 
