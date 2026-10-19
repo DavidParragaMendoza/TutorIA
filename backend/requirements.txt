@@ -1,0 +1,5 @@
+fastapi
+sqlmodel
+pymysql
+pytest
+uvicorn

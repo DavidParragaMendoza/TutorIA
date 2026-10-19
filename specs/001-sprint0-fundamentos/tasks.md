@@ -10,7 +10,7 @@ Este documento detalla la secuencia ordenada de tareas que la IA debe ejecutar p
   - Crear la jerarquía física de carpetas `/frontend`, `/backend` y `/database` respetando la especificación del documento maestro `arquitetura.md`.
   - Se agregó un archivo `.gitkeep` en cada directorio vacío para realizar el respaldo de la estructura en GitHub.
 
-- [ ] **Tarea 1.2: Crear y Activar Entorno Virtual de Python**
+- [x] **Tarea 1.2: Crear y Activar Entorno Virtual de Python**
   - Crear un entorno virtual aislado (`python3.12 -m venv venv`) dentro del directorio `/backend` para congelar versiones y evitar conflictos de librerías globales.
   - Activar el entorno virtual antes de instalar o ejecutar cualquier paquete Python.
 
