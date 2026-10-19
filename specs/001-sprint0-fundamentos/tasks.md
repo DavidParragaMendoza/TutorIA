@@ -101,10 +101,10 @@ Este documento detalla la secuencia ordenada de tareas que la IA debe ejecutar p
   - Creado `backend/app/main.py` con la importación de las 20 entidades y `SQLModel.metadata.create_all(motorMysql)` en el evento `startup`.
   - Verificado en MySQL: 20 tablas físicas en `tutoria_db`, InnoDB y `utf8mb4_unicode_ci`; phpMyAdmin accesible y FastAPI responde correctamente en el arranque.
 
-- [ ] **Tarea 3.3: Configurar Arranque de Inicialización en FastAPI**
+- [x] **Tarea 3.3: Configurar Arranque de Inicialización en FastAPI**
   - Configurar el evento `startup` en `backend/app/main.py` para importar los 20 modelos e invocar `SQLModel.metadata.create_all(motorMysql)`.
 
-- [ ] **Tarea 3.4: Inspección y Verificación Visual en phpMyAdmin**
+- [x] **Tarea 3.4: Inspección y Verificación Visual en phpMyAdmin**
   - Ejecutar el backend de FastAPI y verificar en la interfaz de phpMyAdmin que las 20 tablas relacionales hayan sido creadas físicamente en MySQL con sus llaves foráneas y tipos de datos correctos.
 
 ---
