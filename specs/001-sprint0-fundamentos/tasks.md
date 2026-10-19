@@ -90,11 +90,16 @@ Este documento detalla la secuencia ordenada de tareas que la IA debe ejecutar p
 
 ## Fase 3: Implementación de Persistencia Relacional (SQLModel + MySQL)
 
-- [ ] **Tarea 3.1: Configurar Conexión a MySQL con SQLModel**
+- [x] **Tarea 3.1: Configurar Conexión a MySQL con SQLModel**
   - Crear `backend/app/baseDatos/conexion.py` configurando el motor de SQLModel y la gestión de sesiones mediante `pymysql` usando variables de entorno.
+  - Creado `backend/.env` con los parámetros locales de phpMyAdmin (`root` sin contraseña, base `tutoria_db`) y agregado `.env` al `.gitignore` raíz.
+  - Validado que `conexion.py` compila e importa correctamente (`motorMysql` y `obtenerSesion`), sin errores.
 
-- [ ] **Tarea 3.2: Crear Clases SQLModel en Python (20 Modelos)**
+- [x] **Tarea 3.2: Crear Clases SQLModel en Python (20 Modelos)**
   - Una vez aprobada la auditoría de la Tarea 2.3, crear un archivo `.py` por cada entidad en `backend/app/modelos/` implementando las clases con la anotación `table=True` y la convención `camelCase` en español.
+  - Implementados los 20 modelos con tipos MySQL exactos, 130 columnas, 39 llaves foráneas `RESTRICT`/`RESTRICT`, 16 restricciones UNIQUE, CHECK, índices y auditoría conforme al reporte de conformidad.
+  - Creado `backend/app/main.py` con la importación de las 20 entidades y `SQLModel.metadata.create_all(motorMysql)` en el evento `startup`.
+  - Verificado en MySQL: 20 tablas físicas en `tutoria_db`, InnoDB y `utf8mb4_unicode_ci`; phpMyAdmin accesible y FastAPI responde correctamente en el arranque.
 
 - [ ] **Tarea 3.3: Configurar Arranque de Inicialización en FastAPI**
   - Configurar el evento `startup` en `backend/app/main.py` para importar los 20 modelos e invocar `SQLModel.metadata.create_all(motorMysql)`.

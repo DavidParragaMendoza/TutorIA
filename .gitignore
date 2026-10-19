@@ -1,0 +1,16 @@
+# Variables de entorno locales
+.env
+
+# Entornos virtuales de Python
+venv/
+.venv/
+
+# Cachés de Python
+__pycache__/
+*.py[cod]
+
+# Dependencias del frontend
+node_modules/
+
+# Artefactos de compilación del frontend
+dist/
