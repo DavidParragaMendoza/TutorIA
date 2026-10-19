@@ -6,8 +6,9 @@ Este documento detalla la secuencia ordenada de tareas que la IA debe ejecutar p
 
 ## Fase 1: Arquitectura Base y Entorno Virtual
 
-- [ ] **Tarea 1.1: Crear Estructura de Directorios del Proyecto**
+- [x] **Tarea 1.1: Crear Estructura de Directorios del Proyecto**
   - Crear la jerarquía física de carpetas `/frontend`, `/backend` y `/database` respetando la especificación del documento maestro `arquitetura.md`.
+  - Se agregó un archivo `.gitkeep` en cada directorio vacío para realizar el respaldo de la estructura en GitHub.
 
 - [ ] **Tarea 1.2: Crear y Activar Entorno Virtual de Python**
   - Crear un entorno virtual aislado (`python3.12 -m venv venv`) dentro del directorio `/backend` para congelar versiones y evitar conflictos de librerías globales.
