@@ -26,17 +26,19 @@ Al finalizar este Sprint, la plataforma contará con su esquema relacional integ
   7. `InstitucionesAliadas`: Catálogo de convenios e instituciones (`id`, `nombreInstitucion`, `pais`, `tipoConvenio`, `creadoPor`, `fechaCreacion`).
   8. `Modalidades`: Método de enseñanza (`id`, `nombreModalidad`, `estado`).
   9. `Cursos`: Entidad que agrupa las reglas de la convocatoria uniendo idioma, nivel, institución y modalidad (`id`, `idiomaId`, `nivelId`, `institucionId`, `modalidadId`, `tituloPromocional`, `requisitoAcademico`, `fechaCierrePostulacion`, `estadoConvocatoria`, `creadoPor`, `fechaCreacion`).
-  10. `Paralelos`: Materializa el aula con su docente responsable asignado (`id`, `cursoId`, `periodoAcademicoId`, `docenteId`, `nombreParalelo`, `cupoMaximo`, `horarioDescripcion`, `creadoPor`).
+  10. `Paralelos`: Materializa el aula con su docente responsable asignado (`id`, `cursoId`, `periodoAcademicoId`, `docenteId`, `nombreParalelo`, `cupoMaximo`, `horarioDescripcion`, `creadoPor`, `fechaCreacion`).
   11. `Matriculas`: Registra la inscripción inmutable del estudiante en un paralelo (`id`, `paraleloId`, `estudianteId`, `fechaMatricula`, `estadoMatricula`, `matriculadoPor`).
   12. `SesionesUsuario`: Gestiona el ciclo de vida JWT y guarda el seudónimo SHA-256 para el RAG (`id`, `usuarioId`, `pseudonimoHash`, `fechaInicio`, `fechaExpiracionToken`).
   13. `BloquesPractica`: Agrupa los intentos independientes de lección por estudiante (`id`, `matriculaId`, `sesionId`, `fechaInicio`, `fechaFin`).
   14. `EventosInteraccion`: Registro inmutable de cada respuesta enviada en el chat (`id`, `matriculaId`, `sesionId`, `glosarioId`, `preguntaContingenciaId`, `opcionSeleccionada`, `origenRespuesta`, `preguntaGeneradaTexto`, `opcionesPresentadasJson`, `esCorrecto`, `tiempoRespuestaMs`, `fechaEvento`).
-  15. `EstadoDominioEstudiante`: Rastrea la asimilación del vocabulario HSK1 e inyecta parámetros para el algoritmo SRS (`id`, `matriculaId`, `glosarioId`, `estadoDominio`, `contadorFallos`, `fechaUltimoError`, `ultimaSesionId`, `pesoSrs`, `intervaloDias`, `proximaFechaRepaso`).
+  15. `EstadoDominioEstudiante`: Rastrea la asimilación del vocabulario HSK1 e inyecta parámetros para el algoritmo SRS (`id`, `matriculaId`, `glosarioId`, `estadoDominio`, `contadorFallos`, `fechaUltimoError`, `ultimaSesionId`, `pesoSrs`, `intervaloDias`, `proximaFechaRepaso`, `fechaActualizacion`).
   16. `AuditoriaRutaAprendizaje`: Registro inmutable de decisiones del profesor en su tablero (`id`, `matriculaId`, `docenteId`, `sesionId`, `accionRealizada`, `observacion`, `fechaAccion`).
   17. `DetalleIntervencionGlosario`: Especifica los términos HSK1 ordenados a reforzar por el docente (`id`, `auditoriaId`, `glosarioId`, `prioridadDocente`, `estadoRefuerzo`).
   18. `CategoriasGlosario`: Agrupación temática del vocabulario HSK1 (`id`, `nombreCategoria`, `descripcion`).
   19. `GlosarioHsk1`: Catálogo oficial de términos HSK1/A1 (`id`, `nivelId`, `categoriaId`, `caracterHanzi`, `pinyin`, `traduccionEspanol`).
   20. `PreguntasContingenciaHsk1`: Banco defensivo de reactivos estáticos relacionales para tolerar timeouts en AnythingLLM (`id`, `glosarioId`, `preguntaTexto`, `opcionesJson`, `opcionCorrecta`, `explicacionBase`).
+
+   > Los tipos exactos, la nulabilidad, los valores por defecto, las restricciones UNIQUE, las políticas de llaves foráneas y los índices se formalizan en `docs/REPORTE_CONFORMIDAD_BD_20_TABLAS.md` (Tarea 2.3).
 
 - **RF-03**: MIENTRAS se establezcan las relaciones entre modelos SQLModel, EL SISTEMA aplicará restricciones de integridad referencial (llaves foráneas) e índices para optimizar las consultas en MySQL.
 
