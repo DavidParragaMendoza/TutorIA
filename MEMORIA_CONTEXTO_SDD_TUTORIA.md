@@ -2,7 +2,9 @@
 
 **Proyecto:** TutorIA — Sistema de Orquestación Pedagógica para el Aprendizaje de Chino Mandarín (HSK1/A1)  
 **Metodología de Desarrollo:** Spec-Driven Development (SDD)  
-**Estado Macro:** **SPRINT 0 OFICIALMENTE COMPLETADO (100%)**  
+**Estado Macro:** **SPRINT 1 OFICIALMENTE COMPLETADO (100% — 16/16 PH)**  
+**Suite Certificada:** **152 pruebas en verde (120 backend + 32 frontend), lint y build sin errores**  
+**Última Certificación:** 20 de octubre de 2026 — Auditoría LOPDP aprobada y cierre del Sprint 1  
 **Propósito de este Documento:** Sirve como fuente de memoria inmutable, registro de decisiones técnicas y traspaso de contexto completo para Gemini Notebook / NotebookLM e IDEs de desarrollo (Antigravity, Cursor, VSCode, Roo Code).
 
 ---
@@ -67,37 +69,104 @@ TutorIA es una plataforma educativa de 3 capas diseñada para guiar a estudiante
 
 ---
 
-## 4. Estructura Física Final del Repositorio
+## 4. Resumen de Logros y Hitos del Sprint 1 (16 PH Completados)
+
+**Estado:** **SPRINT 1 OFICIALMENTE COMPLETADO AL 100% (16/16 PH)**  
+**Historias cubiertas:** HU-01, HU-02, HU-23, HU-29 y HU-32.  
+**Suite certificada:** **152 pruebas en verde** (120 backend + 32 frontend), con `npm run lint` y `npm run build` sin errores.
+
+### Fase 1: Datos Semilla y Cifrado (3 PH)
+- Implementación de `backend/app/seguridad/cifrado.py` con `passlib[bcrypt]`.
+- Implementación de `backend/app/baseDatos/semillas.py` con seeding idempotente de 3 roles y 3 usuarios semilla con contraseñas `bcrypt`.
+- Ejecución verificada de `python -m app.baseDatos.semillas` sobre `tutoria_db` en MySQL: roles `ESTUDIANTE`, `DOCENTE` y `ADMINISTRADOR`; usuarios `admin@tutoria.edu.ec`, `docente@tutoria.edu.ec` y `estudiante@tutoria.edu.ec`, todos `ACTIVO`, con `intentosFallidos = 0` y rol asignado en `usuario_rol`.
+- El `lifespan` de FastAPI ejecuta `SQLModel.metadata.create_all()` y `ejecutarSemillas()` en cada arranque.
+
+### Fase 2: Autenticación, JWT, RBAC y API REST (7 PH)
+- Tokens JWT HS256 con claims `sub`, `rol`, `pseudonimoHash` y `exp` (480 minutos).
+- Endpoints operativos: `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me`, `POST /api/v1/users` y `GET /api/v1/users`.
+- Bloqueo de cuenta al tercer intento fallido consecutivo y respuesta HTTP 401 unificada.
+- Logout en servidor mediante `fechaExpiracionToken = ahora (UTC)` en `sesiones_usuario`.
+- Creación y listado de usuarios protegidos por RBAC `ADMINISTRADOR`, con rechazo HTTP 409 ante correo o cédula duplicados.
+
+### Fase 3: Integración Frontend con API Real (4 PH)
+- `clienteApi.js` con `baseURL` de FastAPI e interceptor JWT; limpieza de sesión ante HTTP 401.
+- `autenticacionServicio.js` para login, logout, perfil y creación de usuarios.
+- `VistaAutenticacion.jsx` conectada a la API real, con estados de carga, error y redirección por rol.
+- `RutaProtegida.jsx` y enrutamiento dinámico RBAC para `/estudiante/*`, `/docente/*` y `/admin/*`.
+- `VistaConsolaAdministrador.jsx` conectada a `POST /api/v1/users`, con alertas de éxito/duplicidad y refresco de la tabla.
+
+### Fase 4: Auditoría LOPDP, Calidad y Cierre (2 PH)
+- **TAREA-4.1 — Auditoría de seudonimización LOPDP:** PASS. Se realizó un login real del estudiante y se verificó en MySQL que `sesiones_usuario.pseudonimoHash` contiene un SHA-256 hexadecimal de 64 caracteres, determinista y coincidente con `SHA256(f"{usuarioId}:{SAL_LOPDP_SECRET}")`. Las columnas de `sesiones_usuario` son únicamente `id`, `usuarioId`, `pseudonimoHash`, `fechaInicio` y `fechaExpiracionToken`; no se almacenan nombres, cédulas, correos ni contraseñas.
+- **TAREA-4.2 — Suite completa y compilación:** Backend `pytest`: **120/120 passed, 0 warnings**. Frontend `npm test`: **32/32 passed** en 3 archivos. `npm run lint`: **0 warnings, 0 errores**. `npm run build`: **85 módulos transformados, 0 errores**. Se actualizó `backend/requirements.txt` de `httpx` a `httpx2` para eliminar la advertencia de `starlette.testclient` y certificar la suite sin advertencias.
+- **TAREA-4.3 — Registro y cierre:** Este documento certifica el Sprint 1 al 100% y `specs/002-sprint1-autenticacion/tasks.md` registra las tareas 4.1, 4.2 y 4.3 como completadas.
+
+### Definición de Terminado (DoD) del Sprint 1
+1. [x] Script de semillas funcional, idempotente y ejecutado en el startup de FastAPI.
+2. [x] Endpoints `/login`, `/logout`, `/me` y `/users` operativos.
+3. [x] Cero datos sensibles (cédula, correo, nombre) expuestos en las variables de sesión del RAG.
+4. [x] Suite de pruebas Pytest y Vitest en 100% verde (152 pruebas).
+5. [x] Cero advertencias de linter y compilación `npm run build` exitosa.
+
+---
+
+## 5. Estructura Física Final del Repositorio
 
 ```text
 ProyectoOrquestacion/
 ├── AGENTS.md                                   # Reglas operativas para agentes de IA
+├── MEMORIA_CONTEXTO_SDD_TUTORIA.md             # Memoria y certificación de Sprints
 ├── docs/
 │   ├── constitution.md                         # Principios éticos e innegociables
 │   └── REPORTE_CONFORMIDAD_BD_20_TABLAS.md     # Especificación exacta de las 20 tablas MySQL
 ├── specs/
 │   ├── 000-mvp-overview/
 │   │   └── spec.md                             # Especificación macro del MVP (51 PH)
-│   └── 001-sprint0-fundamentos/
-│       ├── spec.md                             # Requisitos funcionales EARS del Sprint 0
-│       ├── plan.md                             # Diseño técnico de carpetas y modelos
-│       └── tasks.md                            # Checklist completado [x] del Sprint 0
+│   ├── 001-sprint0-fundamentos/
+│   │   ├── spec.md
+│   │   ├── plan.md
+│   │   └── tasks.md                            # Checklist completado [x] del Sprint 0
+│   └── 002-sprint1-autenticacion/
+│       ├── spec.md
+│       ├── plan.md
+│       └── tasks.md                            # Checklist completado [x] del Sprint 1
 ├── plantillas/
 │   └── plantillas-front/                       # Diseños HTML/Tailwind originales de Stitch
 ├── backend/
-│   ├── .env                                    # Configuración local MySQL phpMyAdmin
+│   ├── .env                                    # MySQL, JWT_SECRET_KEY y SAL_LOPDP_SECRET
 │   ├── app/
-│   │   ├── main.py                             # FastAPI y SQLModel.metadata.create_all()
+│   │   ├── main.py                             # FastAPI, CORS, lifespan y seeding
+│   │   ├── api/v1/
+│   │   │   ├── router.py
+│   │   │   └── endpoints/
+│   │   │       ├── autenticacion.py            # /login, /logout y /me
+│   │   │       └── usuarios.py                 # /users con RBAC ADMINISTRADOR
 │   │   ├── baseDatos/
-│   │   │   └── conexion.py                     # Motor SQLModel y generador de sesiones
-│   │   └── modelos/                            # 20 archivos de modelos ORM SQLModel
-│   ├── tests/
-│   │   └── test_modelos.py                     # 43 pruebas unitarias pytest (VERDE)
-│   └── requirements.txt                        # fastapi, sqlmodel, pymysql, pytest, uvicorn
+│   │   │   ├── conexion.py                     # Motor SQLModel y sesiones
+│   │   │   └── semillas.py                     # Seeding idempotente de roles y usuarios
+│   │   ├── esquemas/
+│   │   │   ├── autenticacionEsquemas.py        # DTOs camelCase de autenticación
+│   │   │   └── usuarioEsquemas.py              # DTOs camelCase de usuarios
+│   │   ├── modelos/                            # 20 archivos de modelos ORM SQLModel
+│   │   ├── seguridad/
+│   │   │   ├── cifrado.py                      # bcrypt
+│   │   │   ├── jwt.py                          # JWT HS256
+│   │   │   ├── lopdp.py                        # SHA-256 con sal
+│   │   │   └── dependencias.py                 # RBAC y obtención del usuario actual
+│   │   └── servicios/
+│   │       ├── autenticacionServicio.py        # Login, bloqueo, sesión y logout
+│   │       └── usuarioServicio.py              # Creación y listado de usuarios
+│   ├── tests/                                  # 120 pruebas pytest (VERDE)
+│   ├── requirements.txt
+│   └── venv/
 └── frontend/
     ├── src/
-    │   ├── vistas/                             # 6 vistas base en React
-    │   ├── datosSimulados/                     # Mocks JSON de datos de prueba
+    │   ├── contexto/
+    │   │   └── ContextoAutenticacion.jsx       # Estado global de sesión y JWT
+    │   ├── servicios/
+    │   │   ├── clienteApi.js                   # Axios con interceptor JWT
+    │   │   └── autenticacionServicio.js        # Login, logout, perfil y usuarios
+    │   ├── vistas/                             # 6 vistas, RutaProtegida y 32 pruebas
+    │   ├── datosSimulados/                     # Mocks JSON conservados para pruebas
     │   ├── App.jsx
     │   └── main.jsx
     ├── vite.config.js                          # Configuración de Vite y Vitest
@@ -106,7 +175,7 @@ ProyectoOrquestacion/
 
 ---
 
-## 5. El Esquema Relacional de 20 Entidades en MySQL (`tutoria_db`)
+## 6. El Esquema Relacional de 20 Entidades en MySQL (`tutoria_db`)
 
 1. `Rol` (`roles`): Catálogo estático de permisos.
 2. `Usuario` (`usuarios`): Cuentas, credenciales e historial de intentos fallidos.
@@ -131,25 +200,25 @@ ProyectoOrquestacion/
 
 ---
 
-## 6. Roadmap Macro y Próximo Paso: Sprint 1
+## 7. Roadmap Macro y Próximo Paso: Sprint 2
 
 - **Sprint 0 (6 PH - COMPLETADO):** Fundamentos, Scaffolding, 20 modelos SQLModel en MySQL, 6 Vistas React con Mocks JSON y Pruebas Unitarias.
-- **Sprint 1 (16 PH - PRÓXIMO):** Autenticación, Seguridad y RBAC.
-  - Formulario Login JWT [HU-01]
-  - Redirección por Rol [HU-02]
-  - Cierre de Sesión en Servidor [HU-29]
-  - Consola de Administración [HU-23]
-  - Seudonimización LOPDP Hash SHA-256 [HU-32]
-  - *Estrategia Sprint 1:* Sustitución de `usuariosAuthMock.json` por la conexión real a los endpoints de FastAPI y MySQL.
-- **Sprint 2 (15 PH):** Core Conversacional RAG e Ingesta.
+- **Sprint 1 (16 PH - COMPLETADO AL 100%):** Autenticación, Seguridad, RBAC y Seudonimización LOPDP.
+  - Login JWT y redirección por rol [HU-01, HU-02] — COMPLETADO.
+  - Logout con invalidación en servidor [HU-29] — COMPLETADO.
+  - Consola de Administración de usuarios [HU-23] — COMPLETADO.
+  - Seudonimización SHA-256 con sal [HU-32] — COMPLETADO y auditado en MySQL.
+  - *Resultado certificado:* 152 pruebas en verde (120 backend + 32 frontend), lint y build sin errores.
+- **Sprint 2 (15 PH - PRÓXIMO):** Core Conversacional RAG e Ingesta.
 - **Sprint 3 (14 PH):** SRS, Diagnóstico Docente y Resiliencia Defensiva.
 
 ---
 
-## 7. Instrucciones para la Transición al IDE en el Sprint 1
+## 8. Instrucciones para la Transición al IDE en el Sprint 2
 
-Cuando inicies la especificación del **Sprint 1** en tu IDE:
-1. Crear la carpeta `specs/002-sprint1-autenticacion/` con sus respectivos `spec.md`, `plan.md` y `tasks.md`.
-2. Exigir la creación de Esquemas DTO en Pydantic (`UsuarioLoginEsquema`, `SesionEsquema`) que coincidan exactamente con la tabla `Usuarios` de MySQL.
-3. Actualizar la vista `VistaAutenticacion.jsx` para reemplazar el consumo del mock por la petición `axios.post('/api/v1/auth/login')`.
-4. Ejecutar siempre el ciclo de desarrollo TDD (Escribir primero tests en `pytest` / `vitest`, luego implementar el código, verificar en verde y marcar `[x]` con parada obligatoria).
+Cuando inicies la especificación del **Sprint 2** en tu IDE:
+1. Partir de la suite certificada del Sprint 1 (152 pruebas en verde) y mantener el ciclo TDD (`pytest` / `npm test`).
+2. Reutilizar el token JWT y el `pseudonimoHash` LOPDP generado en `sesiones_usuario`; es el único identificador permitido para las interacciones con AnythingLLM.
+3. No enviar nombres, cédulas, correos ni ningún dato identificable del estudiante al contenedor de AnythingLLM.
+4. Documentar primero la especificación del Sprint 2 en `specs/` antes de implementar endpoints o componentes.
+5. Ejecutar siempre `npm run lint` y `npm run build` antes de cerrar cada fase.

@@ -133,12 +133,12 @@
 
 ## Fase 4: Validación de Calidad, Auditoría LOPDP y DoD (2 PH)
 
-- [ ] **TAREA-4.1: Auditoría de Seudonimización LOPDP en MySQL**
+- [x] **TAREA-4.1: Auditoría de Seudonimización LOPDP en MySQL**
   - **Descripción:** Inspeccionar la tabla `sesiones_usuario` en phpMyAdmin tras un login de estudiante para comprobar que la columna `pseudonimoHash` contiene un hash SHA-256 válido y que no existen nombres, cédulas ni correos almacenados en variables de sesión expuestas a la IA.
 
-- [ ] **TAREA-4.2: Ejecución Completa de la Suite de Pruebas y Compilación**
+- [x] **TAREA-4.2: Ejecución Completa de la Suite de Pruebas y Compilación**
   - **Backend:** `pytest` (Verificar 100% verde sin advertencias).
   - **Frontend:** `npm run test` (Vitest en verde), `npm run build` (0 errores de compilación) y `npm run lint` (0 advertencias).
 
-- [ ] **TAREA-4.3: Registro en Memoria y Cierre de Sprint 1**
+- [x] **TAREA-4.3: Registro en Memoria y Cierre de Sprint 1**
   - **Descripción:** Actualizar `MEMORIA_CONTEXTO_SDD_TUTORIA.md` certificando el cumplimiento de las 5 HUs del Sprint 1 y la transición de datos simulados a la API real de FastAPI.
