@@ -6,7 +6,7 @@ En esta fase de MVP, la plataforma ofrece un chat cerrado con preguntas de opci�
 
 El sistema opera sobre una arquitectura de 3 capas bien delimitadas:
 - `/frontend`: Interfaz de usuario desarrollada en React.
-- `/backend`: API asíncrona desarrollada en FastAPI (Python 3.12) con un orquestador de reglas pedagógicas.
+- `/backend`: API asíncrona desarrollada en FastAPI (Python 3.14) con un orquestador de reglas pedagógicas.
 - `/database`: Persistencia relacional en MySQL mediante el ORM SQLModel (gestionable visualmente en phpMyAdmin) y almacenamiento vectorial local en AnythingLLM mediante Docker.
 
 ## Estructura de Carpetas
@@ -16,7 +16,7 @@ El sistema opera sobre una arquitectura de 3 capas bien delimitadas:
 
 ## Stack Tecnológico Oficial
 - **Frontend**: React.
-- **Backend**: FastAPI (Python 3.12).
+- **Backend**: FastAPI (Python 3.14).
 - **Persistencia Relacional**: MySQL con ORM **SQLModel**.
 - **Motor RAG / IA**: Contenedor local de AnythingLLM en Docker ejecutando el modelo de IA local configurado.
 
