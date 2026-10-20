@@ -98,17 +98,17 @@
 
 ## Fase 3: Integración Frontend - Sustitución de Mocks por API Real (Frontend - 4 PH)
 
-- [ ] **TAREA-3.1: Cliente API HTTP con Interceptores Token JWT**
+- [x] **TAREA-3.1: Cliente API HTTP con Interceptores Token JWT**
   - **Ubicación:** `frontend/src/servicios/clienteApi.js`
-  - **Descripción:** Configurar cliente `axios` con `baseURL: '/api/v1'` e interceptores que:
+  - **Descripción:** Configurar cliente `axios` con `baseURL: 'http://localhost:8000'` e interceptores que:
     1. Adjunten automáticamente el encabezado `Authorization: Bearer <token>` si existe en `localStorage`.
-    2. Intercepten respuestas `HTTP 401 / 403` para redirigir al login si la sesión expira o es inválida.
+    2. Intercepten respuestas `HTTP 401` para limpiar la sesión local e invalidar el acceso.
 
-- [ ] **TAREA-3.2: Servicio de Autenticación Frontend**
+- [x] **TAREA-3.2: Servicio de Autenticación Frontend**
   - **Ubicación:** `frontend/src/servicios/autenticacionServicio.js`
-  - **Descripción:** Crear métodos `iniciarSesion(credenciales)`, `cerrarSesion()`, `obtenerPerfil()` consumiendo los endpoints de FastAPI.
+  - **Descripción:** Crear métodos `iniciarSesion(identificador, contrasena)`, `cerrarSesion()`, `obtenerPerfilUsuario()`, `crearUsuario(datosUsuario)` consumiendo los endpoints de FastAPI y gestionando `localStorage`.
 
-- [ ] **TAREA-3.3: Conexión Real de `VistaAutenticacion.jsx` (HU-01, HU-02)**
+- [x] **TAREA-3.3: Conexión Real de `VistaAutenticacion.jsx` (HU-01, HU-02)**
   - **Ubicación:** `frontend/src/vistas/VistaAutenticacion.jsx`
   - **Descripción:** Reemplazar el consumo de `usuariosAuthMock.json` por la invocación a `autenticacionServicio.iniciarSesion`.
   - **Criterios:**
@@ -116,16 +116,16 @@
     - Mostrar mensaje de error si las credenciales son incorrectas o la cuenta está bloqueada.
     - Guardar token y perfil en el estado global/contexto y redirigir al usuario según su `rolPrincipal`.
 
-- [ ] **TAREA-3.4: Enrutamiento Dinámico y Protección de Rutas RBAC (`App.jsx`)**
+- [x] **TAREA-3.4: Enrutamiento Dinámico y Protección de Rutas RBAC (`App.jsx`)**
   - **Ubicación:** `frontend/src/App.jsx`
   - **Descripción:** Implementar componente de guardia de ruta (`RutaProtegida.jsx`) que valide la presencia de un token activo y el rol autorizado para la vista solicitada (`/estudiante/*`, `/docente/*`, `/admin/*`). Redirigir a `/login` si intenta acceso no autorizado.
 
-- [ ] **TAREA-3.5: Conexión Real de `VistaConsolaAdministrador.jsx` (HU-23)**
+- [x] **TAREA-3.5: Conexión Real de `VistaConsolaAdministrador.jsx` (HU-23)**
   - **Ubicación:** `frontend/src/vistas/VistaConsolaAdministrador.jsx`
   - **Descripción:** Conectar el formulario modal de "Crear Usuario" con la petición `POST /api/v1/users`.
   - **Criterios:** Reemplazar la inserción en el mock por la API real, desplegar alertas de éxito/error (cédula o correo duplicado) y refrescar la tabla de usuarios.
 
-- [ ] **TAREA-3.6: Suite de Pruebas Frontend en Vitest**
+- [x] **TAREA-3.6: Suite de Pruebas Frontend en Vitest**
   - **Ubicación:** `frontend/src/tests/autenticacion.test.jsx`
   - **Criterios:** Verificar el renderizado de la pantalla de login, la captura de formulario, el manejo de respuestas simuladas de la API (exitosas y con error) y la redirección por rol. **Pruebas en verde (100% pass)**.
 

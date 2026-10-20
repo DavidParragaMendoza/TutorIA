@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import datosIniciales from '../datosSimulados/usuariosAdminMock.json'
+import { crearUsuario as crearUsuarioServicio } from '../servicios/autenticacionServicio.js'
 
 const clasesTonoAvatar = {
   porcelain: 'bg-brand-porcelain/10 text-brand-porcelain',
@@ -39,10 +40,12 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
 
   const perfilAdmin = usuarioSesion ?? administrador
 
+  const [listaUsuarios, setListaUsuarios] = useState(usuarios)
   const [pestanaActiva, setPestanaActiva] = useState('usuarios')
   const [terminoBusqueda, setTerminoBusqueda] = useState('')
   const [rolFiltro, setRolFiltro] = useState('todos')
   const [modalAbierto, setModalAbierto] = useState(false)
+  const [guardandoUsuario, setGuardandoUsuario] = useState(false)
   const [formularioUsuario, setFormularioUsuario] = useState(modalUsuario.camposIniciales)
   const [tokenVisible, setTokenVisible] = useState(false)
   const [valoresRag, setValoresRag] = useState(() =>
@@ -68,7 +71,7 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
 
   const usuariosFiltrados = useMemo(() => {
     const termino = terminoBusqueda.trim().toLowerCase()
-    return usuarios.filter((usuario) => {
+    return listaUsuarios.filter((usuario) => {
       const coincideRol = rolFiltro === 'todos' || usuario.rol === rolFiltro
       const coincideBusqueda =
         termino === '' ||
@@ -77,9 +80,9 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
         usuario.correo.toLowerCase().includes(termino)
       return coincideRol && coincideBusqueda
     })
-  }, [usuarios, rolFiltro, terminoBusqueda])
+  }, [listaUsuarios, rolFiltro, terminoBusqueda])
 
-  const cedulaDuplicada = usuarios.some(
+  const cedulaDuplicada = listaUsuarios.some(
     (usuario) => usuario.cedula === formularioUsuario.cedula.trim(),
   )
 
@@ -92,15 +95,59 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
     setModalAbierto(true)
   }
 
-  const guardarUsuario = (evento) => {
+  const guardarUsuario = async (evento) => {
     evento.preventDefault()
-    if (cedulaDuplicada) return
-    setModalAbierto(false)
-    setAviso({
-      titulo: 'Usuario Registrado',
-      descripcion: `${formularioUsuario.nombres || 'Nuevo usuario'} fue añadido al directorio académico como ${formularioUsuario.rol}.`,
-    })
-    setFormularioUsuario(modalUsuario.camposIniciales)
+
+    const mapeoRolId = {
+      Estudiante: 1,
+      ESTUDIANTE: 1,
+      Docente: 2,
+      DOCENTE: 2,
+      Administrador: 3,
+      ADMINISTRADOR: 3,
+    }
+
+    const rolId = mapeoRolId[formularioUsuario.rol] || 1
+    const datosEnvio = {
+      cedula: formularioUsuario.cedula.trim(),
+      nombresCompletos: formularioUsuario.nombres.trim(),
+      correoInstitucional: formularioUsuario.correo.trim(),
+      contrasena: formularioUsuario.contrasena?.trim() || 'Tempo2026!',
+      rolId,
+    }
+
+    setGuardandoUsuario(true)
+    try {
+      const usuarioCreado = await crearUsuarioServicio(datosEnvio)
+      setModalAbierto(false)
+      setAviso({
+        tipo: 'exito',
+        titulo: 'Usuario Registrado',
+        descripcion: `${usuarioCreado.nombresCompletos} fue añadido al directorio académico como ${usuarioCreado.rolPrincipal}.`,
+      })
+      const nuevoParaLista = {
+        id: `USR-${usuarioCreado.id}`,
+        iniciales: usuarioCreado.nombresCompletos.slice(0, 2).toUpperCase(),
+        nombreCompleto: usuarioCreado.nombresCompletos,
+        cedula: usuarioCreado.cedula,
+        correo: usuarioCreado.correoInstitucional,
+        rol: formularioUsuario.rol,
+        estado: 'Activo',
+        tonoAvatar: 'porcelain',
+        acciones: [],
+      }
+      setListaUsuarios((prev) => [nuevoParaLista, ...prev])
+      setFormularioUsuario(modalUsuario.camposIniciales)
+    } catch (error) {
+      const detalle = error.response?.data?.detail
+      setAviso({
+        tipo: 'error',
+        titulo: 'Error al Registrar',
+        descripcion: detalle || 'Ocurrió un error al registrar el usuario en el servidor.',
+      })
+    } finally {
+      setGuardandoUsuario(false)
+    }
   }
 
   const restablecerParametros = () => {
@@ -788,11 +835,23 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
                   {modalUsuario.botonCancelar}
                 </button>
                 <button
-                  className="inline-flex items-center gap-1.5 bg-brand-cinabrio hover:bg-brand-cinabrio/90 text-white px-5 py-2.5 rounded-xl font-headline font-semibold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 bg-brand-cinabrio hover:bg-brand-cinabrio/90 text-white px-5 py-2.5 rounded-xl font-headline font-semibold text-xs shadow-md transition-all active:scale-95 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  disabled={guardandoUsuario || cedulaDuplicada}
                   type="submit"
                 >
-                  <span className="material-symbols-outlined text-sm">check</span>
-                  <span>{modalUsuario.botonGuardar}</span>
+                  {guardandoUsuario ? (
+                    <>
+                      <span className="material-symbols-outlined text-sm animate-spin">
+                        progress_activity
+                      </span>
+                      <span>Guardando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-sm">check</span>
+                      <span>{modalUsuario.botonGuardar}</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -807,8 +866,12 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
           aviso ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'
         }`}
       >
-        <span className="material-symbols-outlined text-emerald-400 text-[22px]">
-          check_circle
+        <span
+          className={`material-symbols-outlined text-[22px] ${
+            aviso?.tipo === 'error' ? 'text-rose-400' : 'text-emerald-400'
+          }`}
+        >
+          {aviso?.tipo === 'error' ? 'error' : 'check_circle'}
         </span>
         <div>
           <p className="text-xs font-bold text-white tracking-wide">

@@ -1,78 +1,166 @@
-import { useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import VistaAutenticacion from './vistas/VistaAutenticacion.jsx'
 import VistaRecuperacionCredenciales from './vistas/VistaRecuperacionCredenciales.jsx'
 import VistaRutaAprendizaje from './vistas/VistaRutaAprendizaje.jsx'
 import VistaChatEstudiante from './vistas/VistaChatEstudiante.jsx'
 import VistaTableroDocente from './vistas/VistaTableroDocente.jsx'
 import VistaConsolaAdministrador from './vistas/VistaConsolaAdministrador.jsx'
+import RutaProtegida from './componentes/RutaProtegida.jsx'
+import {
+  cerrarSesion as cerrarSesionServicio,
+  obtenerUsuarioActual,
+} from './servicios/autenticacionServicio.js'
+import {
+  ROLES,
+  VISTAS,
+  obtenerVistaPorRol,
+  tieneAccesoVista,
+  obtenerVistaDesdeHash,
+  sincronizarHashConVista,
+} from './servicios/enrutamientoServicio.js'
 
 function App() {
-  const [vistaActual, setVistaActual] = useState('autenticacion')
-  const [sesionActual, setSesionActual] = useState(null)
+  const [sesionActual, setSesionActual] = useState(() => obtenerUsuarioActual())
+  const [vistaActual, setVistaActual] = useState(() => {
+    const usuarioInicial = obtenerUsuarioActual()
+    const vistaPorHash = typeof window !== 'undefined' ? obtenerVistaDesdeHash(window.location.hash) : null
 
-  const vistasPorRol = {
-    Docente: 'tableroDocente',
-    Administrador: 'consolaAdministrador',
-  }
+    if (vistaPorHash && tieneAccesoVista(vistaPorHash, usuarioInicial)) {
+      return vistaPorHash
+    }
 
-  const iniciarSesion = (usuario) => {
+    return usuarioInicial ? obtenerVistaPorRol(usuarioInicial) : VISTAS.AUTENTICACION
+  })
+
+  // Sincronización bidireccional y guardián de rutas ante navegación manual en la URL
+  const navegarAVista = useCallback(
+    (vistaSolicitada) => {
+      if (tieneAccesoVista(vistaSolicitada, sesionActual)) {
+        setVistaActual(vistaSolicitada)
+        sincronizarHashConVista(vistaSolicitada)
+      } else {
+        const vistaAutorizada = obtenerVistaPorRol(sesionActual)
+        setVistaActual(vistaAutorizada)
+        sincronizarHashConVista(vistaAutorizada)
+      }
+    },
+    [sesionActual],
+  )
+
+  useEffect(() => {
+    const manejarCambioHash = () => {
+      const vistaHash = obtenerVistaDesdeHash(window.location.hash)
+      if (vistaHash) {
+        navegarAVista(vistaHash)
+      }
+    }
+
+    window.addEventListener('hashchange', manejarCambioHash)
+    sincronizarHashConVista(vistaActual)
+
+    return () => {
+      window.removeEventListener('hashchange', manejarCambioHash)
+    }
+  }, [vistaActual, navegarAVista])
+
+  const manejarInicioSesion = (usuario) => {
     setSesionActual(usuario)
-    setVistaActual(vistasPorRol[usuario.rol] ?? 'rutaAprendizaje')
+    const vistaDestino = obtenerVistaPorRol(usuario)
+    setVistaActual(vistaDestino)
+    sincronizarHashConVista(vistaDestino)
   }
 
-  const cerrarSesion = () => {
-    setSesionActual(null)
-    setVistaActual('autenticacion')
+  const manejarCierreSesion = async () => {
+    try {
+      await cerrarSesionServicio()
+    } finally {
+      setSesionActual(null)
+      setVistaActual(VISTAS.AUTENTICACION)
+      sincronizarHashConVista(VISTAS.AUTENTICACION)
+    }
   }
 
-  if (vistaActual === 'recuperacion') {
+  const redirigirPorAccesoDenegado = () => {
+    const vistaAutorizada = obtenerVistaPorRol(sesionActual)
+    setVistaActual(vistaAutorizada)
+    sincronizarHashConVista(vistaAutorizada)
+  }
+
+  // Enrutamiento condicional con protección RBAC
+  if (vistaActual === VISTAS.RECUPERACION) {
     return (
-      <VistaRecuperacionCredenciales alVolverAlLogin={() => setVistaActual('autenticacion')} />
-    )
-  }
-
-  if (vistaActual === 'rutaAprendizaje') {
-    return (
-      <VistaRutaAprendizaje
-        alIniciarPractica={() => setVistaActual('chat')}
-        alCerrarSesion={cerrarSesion}
-        usuarioSesion={sesionActual}
+      <VistaRecuperacionCredenciales
+        alVolverAlLogin={() => navegarAVista(VISTAS.AUTENTICACION)}
       />
     )
   }
 
-  if (vistaActual === 'chat') {
+  if (vistaActual === VISTAS.RUTA_APRENDIZAJE) {
     return (
-      <VistaChatEstudiante
-        alVolverARuta={() => setVistaActual('rutaAprendizaje')}
-        alCerrarSesion={cerrarSesion}
-        usuarioSesion={sesionActual}
-      />
+      <RutaProtegida
+        alDenegarAcceso={redirigirPorAccesoDenegado}
+        rolesPermitidos={[ROLES.ESTUDIANTE]}
+        usuario={sesionActual}
+      >
+        <VistaRutaAprendizaje
+          alCerrarSesion={manejarCierreSesion}
+          alIniciarPractica={() => navegarAVista(VISTAS.CHAT)}
+          usuarioSesion={sesionActual}
+        />
+      </RutaProtegida>
     )
   }
 
-  if (vistaActual === 'tableroDocente') {
+  if (vistaActual === VISTAS.CHAT) {
     return (
-      <VistaTableroDocente
-        alCerrarSesion={cerrarSesion}
-        usuarioSesion={sesionActual}
-      />
+      <RutaProtegida
+        alDenegarAcceso={redirigirPorAccesoDenegado}
+        rolesPermitidos={[ROLES.ESTUDIANTE]}
+        usuario={sesionActual}
+      >
+        <VistaChatEstudiante
+          alCerrarSesion={manejarCierreSesion}
+          alVolverARuta={() => navegarAVista(VISTAS.RUTA_APRENDIZAJE)}
+          usuarioSesion={sesionActual}
+        />
+      </RutaProtegida>
     )
   }
 
-  if (vistaActual === 'consolaAdministrador') {
+  if (vistaActual === VISTAS.TABLERO_DOCENTE) {
     return (
-      <VistaConsolaAdministrador
-        alCerrarSesion={cerrarSesion}
-        usuarioSesion={sesionActual}
-      />
+      <RutaProtegida
+        alDenegarAcceso={redirigirPorAccesoDenegado}
+        rolesPermitidos={[ROLES.DOCENTE]}
+        usuario={sesionActual}
+      >
+        <VistaTableroDocente
+          alCerrarSesion={manejarCierreSesion}
+          usuarioSesion={sesionActual}
+        />
+      </RutaProtegida>
+    )
+  }
+
+  if (vistaActual === VISTAS.CONSOLA_ADMINISTRADOR) {
+    return (
+      <RutaProtegida
+        alDenegarAcceso={redirigirPorAccesoDenegado}
+        rolesPermitidos={[ROLES.ADMINISTRADOR]}
+        usuario={sesionActual}
+      >
+        <VistaConsolaAdministrador
+          alCerrarSesion={manejarCierreSesion}
+          usuarioSesion={sesionActual}
+        />
+      </RutaProtegida>
     )
   }
 
   return (
     <VistaAutenticacion
-      alSolicitarRecuperacion={() => setVistaActual('recuperacion')}
-      alIniciarSesion={iniciarSesion}
+      alIniciarSesion={manejarInicioSesion}
+      alSolicitarRecuperacion={() => navegarAVista(VISTAS.RECUPERACION)}
     />
   )
 }

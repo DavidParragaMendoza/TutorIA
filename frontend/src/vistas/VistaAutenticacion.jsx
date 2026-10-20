@@ -1,29 +1,29 @@
 import { useState } from 'react'
-import usuariosMock from '../datosSimulados/usuariosAuthMock.json'
+import { iniciarSesion } from '../servicios/autenticacionServicio.js'
 
 function VistaAutenticacion({ alSolicitarRecuperacion, alIniciarSesion }) {
   const [identificador, setIdentificador] = useState('')
   const [contrasena, setContrasena] = useState('')
   const [mostrarContrasena, setMostrarContrasena] = useState(false)
   const [mensajeError, setMensajeError] = useState('')
+  const [cargando, setCargando] = useState(false)
 
-  const manejarEnvio = (evento) => {
+  const manejarEnvio = async (evento) => {
     evento.preventDefault()
-
-    const identificadorNormalizado = identificador.trim().toLowerCase()
-    const usuarioEncontrado = usuariosMock.usuarios.find((usuario) =>
-      [usuario.correo, usuario.usuario].some(
-        (valor) => valor.toLowerCase() === identificadorNormalizado,
-      ),
-    )
-
-    if (!usuarioEncontrado || usuarioEncontrado.contrasena !== contrasena) {
-      setMensajeError('Credenciales inválidas. Verifica tu usuario o correo y tu contraseña.')
-      return
-    }
-
     setMensajeError('')
-    alIniciarSesion(usuarioEncontrado)
+    setCargando(true)
+
+    try {
+      const respuesta = await iniciarSesion(identificador, contrasena)
+      alIniciarSesion(respuesta.usuario)
+    } catch (error) {
+      const detalle = error.response?.data?.detail
+      setMensajeError(
+        detalle || 'Credenciales inválidas. Verifica tu usuario o correo y tu contraseña.',
+      )
+    } finally {
+      setCargando(false)
+    }
   }
 
   return (
@@ -230,11 +230,23 @@ function VistaAutenticacion({ alSolicitarRecuperacion, alIniciarSesion }) {
 
               <div className="pt-2">
                 <button
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-secondary hover:bg-[#ad0d26] active:bg-[#960920] text-on-secondary font-headline font-bold text-sm shadow-[0_2px_8px_rgba(200,16,46,0.24)] hover:shadow-[0_4px_14px_rgba(200,16,46,0.32)] transition-all duration-200 cursor-pointer active:scale-[0.99]"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-secondary hover:bg-[#ad0d26] active:bg-[#960920] text-on-secondary font-headline font-bold text-sm shadow-[0_2px_8px_rgba(200,16,46,0.24)] hover:shadow-[0_4px_14px_rgba(200,16,46,0.32)] transition-all duration-200 cursor-pointer active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+                  disabled={cargando}
                   type="submit"
                 >
-                  <span>Ingresar</span>
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  {cargando ? (
+                    <>
+                      <span className="material-symbols-outlined text-[18px] animate-spin">
+                        progress_activity
+                      </span>
+                      <span>Ingresando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Ingresar</span>
+                      <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
