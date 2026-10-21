@@ -1,5 +1,6 @@
 """Esquemas DTO Pydantic para administración de usuarios."""
 import re
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 
@@ -37,6 +38,14 @@ class UsuarioCreacionEsquema(BaseModel):
         if len(valor) < 8:
             raise ValueError("La contraseña debe tener al menos 8 caracteres.")
         return valor
+
+
+class ActualizacionEstadoUsuarioEsquema(BaseModel):
+    """Datos para actualizar el estado de una cuenta de usuario."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    estado: Literal["ACTIVO", "BLOQUEADO", "INACTIVO"]
 
 
 class RespuestaUsuarioEsquema(BaseModel):

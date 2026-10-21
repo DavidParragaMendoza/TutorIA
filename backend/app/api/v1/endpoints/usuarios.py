@@ -6,13 +6,18 @@ from sqlmodel import Session
 
 from app.baseDatos.conexion import obtenerSesion
 from app.esquemas.usuarioEsquemas import (
+    ActualizacionEstadoUsuarioEsquema,
     RespuestaListaUsuariosEsquema,
     RespuestaUsuarioEsquema,
     UsuarioCreacionEsquema,
 )
 from app.modelos.usuario import Usuario
 from app.seguridad.dependencias import requerirRoles
-from app.servicios.usuarioServicio import crearUsuario, listarUsuarios
+from app.servicios.usuarioServicio import (
+    actualizarEstadoUsuario,
+    crearUsuario,
+    listarUsuarios,
+)
 
 router = APIRouter()
 
@@ -48,3 +53,20 @@ def consultarUsuarios(
 ) -> RespuestaListaUsuariosEsquema:
     """Retorna la lista de usuarios del sistema con paginación."""
     return listarUsuarios(sesionBd, pagina=pagina, tamano=tamano, filtroRol=rol)
+
+
+@router.patch(
+    "/{usuarioId}/estado",
+    response_model=RespuestaUsuarioEsquema,
+    status_code=status.HTTP_200_OK,
+    summary="Actualizar el estado de un usuario (Solo Administrador)",
+)
+def cambiarEstadoUsuario(
+    usuarioId: int,
+    datos: ActualizacionEstadoUsuarioEsquema,
+    datosAdmin: Annotated[tuple[Usuario, str, str], Depends(requerirRoles("ADMINISTRADOR"))],
+    sesionBd: Annotated[Session, Depends(obtenerSesion)],
+) -> RespuestaUsuarioEsquema:
+    """Permite activar, bloquear o inactivar una cuenta del directorio."""
+    admin, _, _ = datosAdmin
+    return actualizarEstadoUsuario(sesionBd, usuarioId, datos, admin.id)

@@ -2,9 +2,9 @@
 
 **Proyecto:** TutorIA — Sistema de Orquestación Pedagógica para el Aprendizaje de Chino Mandarín (HSK1/A1)  
 **Metodología de Desarrollo:** Spec-Driven Development (SDD)  
-**Estado Macro:** **SPRINT 1 OFICIALMENTE COMPLETADO (100% — 16/16 PH)**  
-**Suite Certificada:** **152 pruebas en verde (120 backend + 32 frontend), lint y build sin errores**  
-**Última Certificación:** 20 de octubre de 2026 — Auditoría LOPDP aprobada y cierre del Sprint 1  
+**Estado Macro:** **SPRINT 1 OFICIALMENTE COMPLETADO (100% — 18/18 PH)**  
+**Suite Certificada:** **176 pruebas en verde (132 backend + 44 frontend), lint y build sin errores**  
+**Última Certificación:** 20 de octubre de 2026 — Cierre T8: sustitución total de mocks, autenticación real y DoD certificado  
 **Propósito de este Documento:** Sirve como fuente de memoria inmutable, registro de decisiones técnicas y traspaso de contexto completo para Gemini Notebook / NotebookLM e IDEs de desarrollo (Antigravity, Cursor, VSCode, Roo Code).
 
 ---
@@ -58,8 +58,7 @@ TutorIA es una plataforma educativa de 3 capas diseñada para guiar a estudiante
   5. `VistaTableroDocente.jsx` (Monitoreo analítico y semáforos de riesgo)
   6. `VistaConsolaAdministrador.jsx` (Gestión centralizada de usuarios)
 - Limpieza total de marcas antiguas (*KUMA HuáYu* → *TutorIA*) y actualización de años.
-- Aislamiento de datos de prueba en Mocks JSON (`frontend/src/datosSimulados/`):
-  - `usuariosAuthMock.json`, `chatVocabularioMock.json`, `rutaAprendizajeMock.json`, `estudiantesDocenteMock.json`, `usuariosAdminMock.json`.
+- Aislamiento original de datos de prueba en Mocks JSON (`frontend/src/datosSimulados/`). En el Sprint 1 se eliminaron definitivamente `usuariosAuthMock.json` y `usuariosAdminMock.json`; solo permanecen `chatVocabularioMock.json`, `rutaAprendizajeMock.json` y `estudiantesDocenteMock.json` como datos pedagógicos de los Sprints 2 y 3.
 
 ### Fase 5: Suite de Pruebas Automatizadas y Control de Calidad
 - **Backend (`pytest`):** **43 pruebas en verde** (`test_modelos.py`) confirmando instanciación y registro de metadata de las 20 clases SQLModel.
@@ -69,11 +68,12 @@ TutorIA es una plataforma educativa de 3 capas diseñada para guiar a estudiante
 
 ---
 
-## 4. Resumen de Logros y Hitos del Sprint 1 (16 PH Completados)
+## 4. Resumen de Logros y Hitos del Sprint 1 (18 PH Completados)
 
-**Estado:** **SPRINT 1 OFICIALMENTE COMPLETADO AL 100% (16/16 PH)**  
+**Estado:** **SPRINT 1 OFICIALMENTE COMPLETADO AL 100% (18/18 PH)**  
 **Historias cubiertas:** HU-01, HU-02, HU-23, HU-29 y HU-32.  
-**Suite certificada:** **152 pruebas en verde** (120 backend + 32 frontend), con `npm run lint` y `npm run build` sin errores.
+**Suite certificada:** **176 pruebas en verde** (132 backend + 44 frontend), con `npm run lint` y `npm run build` sin errores.
+**Sustitución de mocks:** **TOTAL**. `usuariosAuthMock.json` y `usuariosAdminMock.json` fueron eliminados; login, perfil, logout, directorio y cambios de estado consumen exclusivamente la API REST de FastAPI respaldada por MySQL.
 
 ### Fase 1: Datos Semilla y Cifrado (3 PH)
 - Implementación de `backend/app/seguridad/cifrado.py` con `passlib[bcrypt]`.
@@ -97,15 +97,21 @@ TutorIA es una plataforma educativa de 3 capas diseñada para guiar a estudiante
 
 ### Fase 4: Auditoría LOPDP, Calidad y Cierre (2 PH)
 - **TAREA-4.1 — Auditoría de seudonimización LOPDP:** PASS. Se realizó un login real del estudiante y se verificó en MySQL que `sesiones_usuario.pseudonimoHash` contiene un SHA-256 hexadecimal de 64 caracteres, determinista y coincidente con `SHA256(f"{usuarioId}:{SAL_LOPDP_SECRET}")`. Las columnas de `sesiones_usuario` son únicamente `id`, `usuarioId`, `pseudonimoHash`, `fechaInicio` y `fechaExpiracionToken`; no se almacenan nombres, cédulas, correos ni contraseñas.
-- **TAREA-4.2 — Suite completa y compilación:** Backend `pytest`: **120/120 passed, 0 warnings**. Frontend `npm test`: **32/32 passed** en 3 archivos. `npm run lint`: **0 warnings, 0 errores**. `npm run build`: **85 módulos transformados, 0 errores**. Se actualizó `backend/requirements.txt` de `httpx` a `httpx2` para eliminar la advertencia de `starlette.testclient` y certificar la suite sin advertencias.
+- **TAREA-4.2 — Suite completa y compilación (al cierre de la Fase 4):** Backend `pytest`: **120/120 passed, 0 warnings**. Frontend `npm test`: **32/32 passed** en 3 archivos. `npm run lint`: **0 warnings, 0 errores**. `npm run build`: **85 módulos transformados, 0 errores**. Se actualizó `backend/requirements.txt` de `httpx` a `httpx2` para eliminar la advertencia de `starlette.testclient` y certificar la suite sin advertencias.
 - **TAREA-4.3 — Registro y cierre:** Este documento certifica el Sprint 1 al 100% y `specs/002-sprint1-autenticacion/tasks.md` registra las tareas 4.1, 4.2 y 4.3 como completadas.
+
+### Fase 5: Sincronización del Directorio y Gestión de Estados (2 PH)
+- **T6 — Backend `PATCH /api/v1/users/{usuarioId}/estado`:** Implementado con RBAC `ADMINISTRADOR`; al establecer `ACTIVO` reinicia `intentosFallidos = 0`, registra `actualizadoPor` y `fechaActualizacion`, y rechaza el autobloqueo/autoinactivación del Administrador con HTTP 409 Conflict.
+- **T7 — Consola Admin sincronizada:** `VistaConsolaAdministrador.jsx` carga el directorio con `GET /api/v1/users?pagina=1&tamano=100` al montar y tras cada mutación, mapea los DTOs de MySQL y renderiza acciones reales de estado (`Activar`, `Bloquear`, `Inactivar`, `Desbloquear`).
+- **T8 — Validación final y cierre de DoD:** Backend `pytest`: **132/132 passed, 0 warnings**. Frontend `npm test`: **44/44 passed en 4 archivos**. `npm run lint`: **0 warnings, 0 errores**. `npm run build`: **84 módulos transformados, 0 errores**. Se eliminaron `usuariosAuthMock.json` y `usuariosAdminMock.json`, certificando la sustitución total de mocks por la API REST real.
 
 ### Definición de Terminado (DoD) del Sprint 1
 1. [x] Script de semillas funcional, idempotente y ejecutado en el startup de FastAPI.
-2. [x] Endpoints `/login`, `/logout`, `/me` y `/users` operativos.
+2. [x] Endpoints `/login`, `/logout`, `/me` y `/users` operativos, incluido `PATCH /users/{usuarioId}/estado`.
 3. [x] Cero datos sensibles (cédula, correo, nombre) expuestos en las variables de sesión del RAG.
-4. [x] Suite de pruebas Pytest y Vitest en 100% verde (152 pruebas).
+4. [x] Suite de pruebas Pytest y Vitest en 100% verde (176 pruebas: 132 backend + 44 frontend).
 5. [x] Cero advertencias de linter y compilación `npm run build` exitosa.
+6. [x] Sustitución total de mocks de autenticación y administración por MySQL vía FastAPI.
 
 ---
 
@@ -154,8 +160,8 @@ ProyectoOrquestacion/
 │   │   │   └── dependencias.py                 # RBAC y obtención del usuario actual
 │   │   └── servicios/
 │   │       ├── autenticacionServicio.py        # Login, bloqueo, sesión y logout
-│   │       └── usuarioServicio.py              # Creación y listado de usuarios
-│   ├── tests/                                  # 120 pruebas pytest (VERDE)
+│   │       └── usuarioServicio.py              # Creación, listado y cambio de estado
+│   ├── tests/                                  # 132 pruebas pytest (VERDE)
 │   ├── requirements.txt
 │   └── venv/
 └── frontend/
@@ -166,7 +172,8 @@ ProyectoOrquestacion/
     │   │   ├── clienteApi.js                   # Axios con interceptor JWT
     │   │   └── autenticacionServicio.js        # Login, logout, perfil y usuarios
     │   ├── vistas/                             # 6 vistas, RutaProtegida y 32 pruebas
-    │   ├── datosSimulados/                     # Mocks JSON conservados para pruebas
+    │   ├── tests/                              # 12 pruebas de consola admin (VERDE)
+    │   ├── datosSimulados/                     # Mocks pedagógicos de Sprints 2 y 3 (sin auth/admin)
     │   ├── App.jsx
     │   └── main.jsx
     ├── vite.config.js                          # Configuración de Vite y Vitest
@@ -203,12 +210,12 @@ ProyectoOrquestacion/
 ## 7. Roadmap Macro y Próximo Paso: Sprint 2
 
 - **Sprint 0 (6 PH - COMPLETADO):** Fundamentos, Scaffolding, 20 modelos SQLModel en MySQL, 6 Vistas React con Mocks JSON y Pruebas Unitarias.
-- **Sprint 1 (16 PH - COMPLETADO AL 100%):** Autenticación, Seguridad, RBAC y Seudonimización LOPDP.
+- **Sprint 1 (18 PH - COMPLETADO AL 100%):** Autenticación, Seguridad, RBAC y Seudonimización LOPDP.
   - Login JWT y redirección por rol [HU-01, HU-02] — COMPLETADO.
   - Logout con invalidación en servidor [HU-29] — COMPLETADO.
-  - Consola de Administración de usuarios [HU-23] — COMPLETADO.
+  - Consola de Administración de usuarios con directorio sincronizado y gestión de estados [HU-23] — COMPLETADO.
   - Seudonimización SHA-256 con sal [HU-32] — COMPLETADO y auditado en MySQL.
-  - *Resultado certificado:* 152 pruebas en verde (120 backend + 32 frontend), lint y build sin errores.
+  - *Resultado certificado:* 176 pruebas en verde (132 backend + 44 frontend), lint y build sin errores.
 - **Sprint 2 (15 PH - PRÓXIMO):** Core Conversacional RAG e Ingesta.
 - **Sprint 3 (14 PH):** SRS, Diagnóstico Docente y Resiliencia Defensiva.
 
@@ -217,7 +224,7 @@ ProyectoOrquestacion/
 ## 8. Instrucciones para la Transición al IDE en el Sprint 2
 
 Cuando inicies la especificación del **Sprint 2** en tu IDE:
-1. Partir de la suite certificada del Sprint 1 (152 pruebas en verde) y mantener el ciclo TDD (`pytest` / `npm test`).
+1. Partir de la suite certificada del Sprint 1 (176 pruebas en verde) y mantener el ciclo TDD (`pytest` / `npm test`).
 2. Reutilizar el token JWT y el `pseudonimoHash` LOPDP generado en `sesiones_usuario`; es el único identificador permitido para las interacciones con AnythingLLM.
 3. No enviar nombres, cédulas, correos ni ningún dato identificable del estudiante al contenedor de AnythingLLM.
 4. Documentar primero la especificación del Sprint 2 en `specs/` antes de implementar endpoints o componentes.

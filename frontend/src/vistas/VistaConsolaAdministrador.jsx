@@ -1,6 +1,137 @@
-import { useEffect, useMemo, useState } from 'react'
-import datosIniciales from '../datosSimulados/usuariosAdminMock.json'
-import { crearUsuario as crearUsuarioServicio } from '../servicios/autenticacionServicio.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  actualizarEstadoUsuario as actualizarEstadoUsuarioServicio,
+  crearUsuario as crearUsuarioServicio,
+  obtenerUsuarios,
+} from '../servicios/autenticacionServicio.js'
+
+const configuracionConsola = {
+  marca: {
+    nombreBase: 'Tutor',
+    nombreDestacado: 'IA',
+    etiquetaRol: 'Admin Portal',
+  },
+  sistema: {
+    etiquetaVersion: 'TUTORIA-SYS-v2.4',
+    cluster: 'CLUSTER-ECU-01',
+  },
+  administrador: {
+    nombreCompleto: 'Administrador TutorIA',
+    correo: 'admin@tutoria.edu.ec',
+    iniciales: 'AD',
+  },
+  encabezado: {
+    titulo: 'Panel de Control & Consola Técnica',
+    subtitulo:
+      'Gobernanza pedagógica, directorio de usuarios y orquestación de inferencia local para tutoría en mandarín.',
+  },
+  pestanas: [
+    { clave: 'usuarios', etiqueta: 'Gestión de Usuarios', icono: 'group', insignia: 'HU-23' },
+    { clave: 'ia', etiqueta: 'Configuración IA', icono: 'neurology', insignia: 'HU-24' },
+  ],
+  directorio: {
+    titulo: 'Directorio Académico',
+    estado: 'Directorio Sincronizado — MySQL Local',
+    descripcion:
+      'Control centralizado de credenciales, roles pedagógicos y mitigación de acceso docente y estudiantil.',
+    botonNuevo: 'Nuevo Usuario',
+    etiquetaRegistros: 'Registros:',
+  },
+  filtrosRol: [
+    { valor: 'todos', etiqueta: 'Todos los roles (Estudiante, Docente, Admin)' },
+    { valor: 'Estudiante', etiqueta: 'Estudiantes' },
+    { valor: 'Docente', etiqueta: 'Docentes' },
+    { valor: 'Administrador', etiqueta: 'Administradores' },
+  ],
+  parametrosIa: {
+    hero: {
+      etiqueta: 'Inferencia de Borde Activa',
+      titulo: 'Motor Local RAG & Fonética de Alta Fidelidad',
+      detalle:
+        'Latencia RAG 42ms · GPU Local Activa (NVIDIA RTX 4090 / CUDA 12.4) · Whisper Large-v3 montado en memoria.',
+      estadoEtiqueta: 'Estado del Servicio',
+      estadoValor: 'Conexión Estable (200 OK)',
+    },
+    motorRag: {
+      titulo: 'Motor RAG (AnythingLLM / Ollama)',
+      descripcion: 'Recuperación semántica aumentada para gramática HSK 1-6',
+      insignia: 'LLM PORT',
+      icono: 'database',
+      campos: [
+        {
+          clave: 'endpoint',
+          etiqueta: 'URL del Endpoint Local',
+          valor: 'http://127.0.0.1:3001/api/v1/rag',
+          icono: 'link',
+          ayuda: 'Ruta interna del backend local para la vectorización de lecciones.',
+        },
+        {
+          clave: 'timeout',
+          etiqueta: 'Timeout de Latencia (Segundos)',
+          valor: '3.0 segundos',
+          icono: 'timer',
+          ayuda: 'Límite antes del fallback pedagógico con respuestas fijas.',
+        },
+      ],
+    },
+    motorAudio: {
+      titulo: 'Motor de Audio Fonético (Whisper Large-v3)',
+      descripcion: 'Evaluación de tonos (声调), pinyin y prosodia de estudiantes',
+      insignia: 'ASR MODEL',
+      icono: 'record_voice_over',
+      etiquetaToken: 'API Key / Token de Autenticación',
+      token: 'sk-whisp-tutoria-9840293847291039485',
+      ayudaToken:
+        'Clave segura para el pipeline gRPC del servicio de transcripción de audio.',
+      telemetria: [
+        { etiqueta: 'Tasa de Inferencia', valor: '0.18s / fonema', tono: 'porcelain' },
+        { etiqueta: 'Precisión Tonal', valor: '99.4% HSK 1-3', tono: 'secondary' },
+      ],
+    },
+    ultimaActualizacion: 'Última actualización de pesos: 2026-10-12 10:14:02 UTC',
+    botonRestablecer: 'Restablecer Valores',
+    botonGuardar: 'Guardar Cambios',
+  },
+  modalUsuario: {
+    titulo: 'Nuevo Usuario',
+    subtitulo: 'Crea una credencial institucional en el directorio académico',
+    etiquetaNombres: 'Nombres y Apellidos',
+    marcadorNombres: 'Ej. Juan Pérez',
+    etiquetaCedula: 'Cédula de Identidad',
+    ayudaCedula: 'Solo números (10 dígitos)',
+    marcadorCedula: '0000000000',
+    etiquetaCorreo: 'Correo Institucional',
+    marcadorCorreo: 'nombre@tutoria.edu',
+    etiquetaRol: 'Rol de Acceso',
+    rolesDisponibles: [
+      { valor: 'Estudiante', etiqueta: 'Estudiante (Acceso a lecciones, SRS y tareas)' },
+      { valor: 'Docente', etiqueta: 'Docente (Gestión pedagógica y calificaciones)' },
+      { valor: 'Administrador', etiqueta: 'Admin (Control total del sistema y analíticas)' },
+    ],
+    errorDuplicado: 'Esta cuenta ya existe en el directorio local',
+    botonCancelar: 'Cancelar',
+    botonGuardar: 'Guardar',
+    camposIniciales: {
+      nombres: '',
+      cedula: '',
+      correo: '',
+      rol: 'Estudiante',
+    },
+  },
+  textos: {
+    menuPrincipal: 'Menú Principal',
+    cerrarSesion: 'Cerrar Sesión',
+    buscarPlaceholder: 'Buscar por nombre, cédula o correo institucional...',
+    columnaNombre: 'Nombre & Apellido',
+    columnaCedula: 'Cédula',
+    columnaCorreo: 'Correo Institucional',
+    columnaRol: 'Rol Académico',
+    columnaEstado: 'Estado',
+    columnaAcciones: 'Acciones',
+    pieMarca: 'TutorIA Studio',
+    pieEstado: 'Consola de Administración Centralizada',
+  },
+}
 
 const clasesTonoAvatar = {
   porcelain: 'bg-brand-porcelain/10 text-brand-porcelain',
@@ -21,8 +152,107 @@ const clasesTonoAccion = {
   neutral: 'text-slate-600 hover:bg-surface-container',
 }
 
+const estilosEstado = {
+  ACTIVO: {
+    contenedor: 'bg-emerald-50 text-emerald-800',
+    punto: 'bg-emerald-600',
+  },
+  BLOQUEADO: {
+    contenedor: 'bg-red-50 text-red-700',
+    punto: 'bg-red-600',
+  },
+  INACTIVO: {
+    contenedor: 'bg-amber-50 text-amber-800',
+    punto: 'bg-amber-500',
+  },
+}
+
+const etiquetasRol = {
+  ESTUDIANTE: 'Estudiante',
+  DOCENTE: 'Docente',
+  ADMINISTRADOR: 'Administrador',
+}
+
+const accionesPorEstado = {
+  ACTIVO: [
+    {
+      clave: 'bloquear',
+      etiqueta: 'Bloquear',
+      icono: 'block',
+      tono: 'secondary',
+      estadoDestino: 'BLOQUEADO',
+      destructiva: true,
+    },
+    {
+      clave: 'inactivar',
+      etiqueta: 'Inactivar',
+      icono: 'person_off',
+      tono: 'neutral',
+      estadoDestino: 'INACTIVO',
+      destructiva: true,
+    },
+  ],
+  BLOQUEADO: [
+    {
+      clave: 'desbloquear',
+      etiqueta: 'Desbloquear',
+      icono: 'lock_open',
+      tono: 'emerald',
+      estadoDestino: 'ACTIVO',
+      destructiva: false,
+    },
+    {
+      clave: 'inactivar',
+      etiqueta: 'Inactivar',
+      icono: 'person_off',
+      tono: 'neutral',
+      estadoDestino: 'INACTIVO',
+      destructiva: true,
+    },
+  ],
+  INACTIVO: [
+    {
+      clave: 'activar',
+      etiqueta: 'Activar',
+      icono: 'check_circle',
+      tono: 'emerald',
+      estadoDestino: 'ACTIVO',
+      destructiva: false,
+    },
+  ],
+}
+
+function obtenerIniciales(nombreCompleto = '') {
+  const palabras = nombreCompleto.trim().split(/\s+/).filter(Boolean)
+  const iniciales = palabras.slice(0, 2).map((palabra) => palabra[0]).join('')
+  return iniciales.toUpperCase() || 'US'
+}
+
+function mapearUsuarioDesdeApi(usuario) {
+  const rolPrincipal = String(usuario.rolPrincipal || '').toUpperCase()
+  const estado = String(usuario.estado || 'ACTIVO').toUpperCase()
+  const tonosPorRol = {
+    ADMINISTRADOR: 'cinabrio',
+    DOCENTE: 'emerald',
+    ESTUDIANTE: 'porcelain',
+  }
+
+  return {
+    id: usuario.id,
+    cedula: usuario.cedula,
+    nombresCompletos: usuario.nombresCompletos,
+    correoInstitucional: usuario.correoInstitucional,
+    rolPrincipal,
+    estado,
+    nombreCompleto: usuario.nombresCompletos,
+    correo: usuario.correoInstitucional,
+    rol: etiquetasRol[rolPrincipal] || usuario.rolPrincipal,
+    iniciales: obtenerIniciales(usuario.nombresCompletos),
+    tonoAvatar: tonosPorRol[rolPrincipal] || 'porcelain',
+  }
+}
+
 function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
-  const [datos] = useState(datosIniciales)
   const {
     marca,
     sistema,
@@ -31,16 +261,24 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
     pestanas,
     directorio,
     filtrosRol,
-    usuarios,
-    paginacion,
     parametrosIa,
     modalUsuario,
     textos,
-  } = datos
+  } = configuracionConsola
 
   const perfilAdmin = usuarioSesion ?? administrador
+  const nombreAdmin =
+    perfilAdmin.nombreCompleto || perfilAdmin.nombresCompletos || administrador.nombreCompleto
+  const correoAdmin =
+    perfilAdmin.correo || perfilAdmin.correoInstitucional || administrador.correo
+  const inicialesAdmin = perfilAdmin.iniciales || obtenerIniciales(nombreAdmin)
+  const idAdministrador = perfilAdmin.id ?? null
 
-  const [listaUsuarios, setListaUsuarios] = useState(usuarios)
+  const [listaUsuarios, setListaUsuarios] = useState([])
+  const [totalUsuarios, setTotalUsuarios] = useState(0)
+  const [cargandoUsuarios, setCargandoUsuarios] = useState(true)
+  const [errorCarga, setErrorCarga] = useState(null)
+  const [usuarioEnProceso, setUsuarioEnProceso] = useState(null)
   const [pestanaActiva, setPestanaActiva] = useState('usuarios')
   const [terminoBusqueda, setTerminoBusqueda] = useState('')
   const [rolFiltro, setRolFiltro] = useState('todos')
@@ -53,6 +291,50 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
   )
   const [tokenAudio, setTokenAudio] = useState(parametrosIa.motorAudio.token)
   const [aviso, setAviso] = useState(null)
+
+  const aplicarDirectorio = useCallback((respuesta) => {
+    const usuariosApi = Array.isArray(respuesta?.usuarios) ? respuesta.usuarios : []
+    setListaUsuarios(usuariosApi.map(mapearUsuarioDesdeApi))
+    setTotalUsuarios(respuesta?.total ?? usuariosApi.length)
+  }, [])
+
+  const cargarUsuarios = useCallback(async () => {
+    setCargandoUsuarios(true)
+    setErrorCarga(null)
+
+    try {
+      const respuesta = await obtenerUsuarios({ pagina: 1, tamano: 100 })
+      aplicarDirectorio(respuesta)
+    } catch (error) {
+      const detalle = error?.response?.data?.detail
+      setErrorCarga(detalle || 'No fue posible cargar el directorio de usuarios.')
+    } finally {
+      setCargandoUsuarios(false)
+    }
+  }, [aplicarDirectorio])
+
+  useEffect(() => {
+    let activo = true
+
+    const consultarDirectorioInicial = async () => {
+      try {
+        const respuesta = await obtenerUsuarios({ pagina: 1, tamano: 100 })
+        if (activo) aplicarDirectorio(respuesta)
+      } catch (error) {
+        if (!activo) return
+        const detalle = error?.response?.data?.detail
+        setErrorCarga(detalle || 'No fue posible cargar el directorio de usuarios.')
+      } finally {
+        if (activo) setCargandoUsuarios(false)
+      }
+    }
+
+    consultarDirectorioInicial()
+
+    return () => {
+      activo = false
+    }
+  }, [aplicarDirectorio])
 
   useEffect(() => {
     if (!aviso) return undefined
@@ -125,19 +407,8 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
         titulo: 'Usuario Registrado',
         descripcion: `${usuarioCreado.nombresCompletos} fue añadido al directorio académico como ${usuarioCreado.rolPrincipal}.`,
       })
-      const nuevoParaLista = {
-        id: `USR-${usuarioCreado.id}`,
-        iniciales: usuarioCreado.nombresCompletos.slice(0, 2).toUpperCase(),
-        nombreCompleto: usuarioCreado.nombresCompletos,
-        cedula: usuarioCreado.cedula,
-        correo: usuarioCreado.correoInstitucional,
-        rol: formularioUsuario.rol,
-        estado: 'Activo',
-        tonoAvatar: 'porcelain',
-        acciones: [],
-      }
-      setListaUsuarios((prev) => [nuevoParaLista, ...prev])
       setFormularioUsuario(modalUsuario.camposIniciales)
+      await cargarUsuarios()
     } catch (error) {
       const detalle = error.response?.data?.detail
       setAviso({
@@ -147,6 +418,30 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
       })
     } finally {
       setGuardandoUsuario(false)
+    }
+  }
+
+  const cambiarEstadoUsuario = async (usuario, estadoDestino) => {
+    setUsuarioEnProceso(usuario.id)
+
+    try {
+      await actualizarEstadoUsuarioServicio(usuario.id, estadoDestino)
+      setAviso({
+        tipo: 'exito',
+        titulo: 'Estado Actualizado',
+        descripcion: `${usuario.nombreCompleto} ahora se encuentra ${estadoDestino}.`,
+      })
+      await cargarUsuarios()
+    } catch (error) {
+      const detalle = error?.response?.data?.detail
+      setAviso({
+        tipo: 'error',
+        titulo: 'Error al Actualizar Estado',
+        descripcion:
+          detalle || 'No fue posible actualizar el estado del usuario en el servidor.',
+      })
+    } finally {
+      setUsuarioEnProceso(null)
     }
   }
 
@@ -236,13 +531,13 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
         <div className="p-4 border-t border-brand-border-light bg-brand-card/80">
           <div className="flex items-center gap-3 px-2 py-2 mb-2 rounded-lg bg-brand-bg/60">
             <div className="w-8 h-8 rounded-full bg-brand-porcelain/15 flex items-center justify-center text-brand-porcelain font-bold text-xs">
-              {perfilAdmin.iniciales}
+              {inicialesAdmin}
             </div>
             <div className="overflow-hidden flex-1">
               <p className="text-xs font-semibold text-brand-porcelain truncate">
-                {perfilAdmin.nombreCompleto}
+                {nombreAdmin}
               </p>
-              <p className="text-[11px] text-brand-porcelain/60 truncate">{perfilAdmin.correo}</p>
+              <p className="text-[11px] text-brand-porcelain/60 truncate">{correoAdmin}</p>
             </div>
           </div>
           <button
@@ -397,86 +692,128 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-surface-container-highest/60 text-xs font-body">
-                      {usuariosFiltrados.map((usuario) => {
-                        const activo = usuario.estado === 'Activo'
-                        return (
-                          <tr
-                            className={`hover:bg-surface-container-low/50 transition-colors ${
-                              usuario.destacado ? 'bg-brand-cinabrio/5' : ''
-                            }`}
-                            key={usuario.id}
-                          >
-                            <td className="py-4 px-6">
-                              <div className="flex items-center gap-3">
-                                <div
-                                  className={`w-8 h-8 rounded-lg font-headline font-bold flex items-center justify-center text-xs ${clasesTonoAvatar[usuario.tonoAvatar]}`}
-                                >
-                                  {usuario.iniciales}
-                                </div>
-                                <div>
-                                  <p className="font-headline font-semibold text-brand-porcelain">
-                                    {usuario.nombreCompleto}
-                                  </p>
-                                  <p className="text-[10px] text-on-surface-variant font-label">
-                                    ID: {usuario.id}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="py-4 px-4 font-label font-medium text-on-surface">
-                              {usuario.cedula}
-                            </td>
-                            <td className="py-4 px-4 text-on-surface-variant font-label">
-                              {usuario.correo}
-                            </td>
-                            <td className="py-4 px-4">
-                              <span
-                                className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border ${clasesRol[usuario.rol]}`}
-                              >
-                                {usuario.rol}
+                      {cargandoUsuarios && (
+                        <tr>
+                          <td className="py-10 px-6" colSpan={6}>
+                            <div
+                              className="flex items-center justify-center gap-2 text-sm text-on-surface-variant"
+                              role="status"
+                            >
+                              <span className="material-symbols-outlined text-lg animate-spin">
+                                progress_activity
                               </span>
-                            </td>
-                            <td className="py-4 px-4">
-                              <span
-                                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
-                                  activo
-                                    ? 'bg-emerald-50 text-emerald-800'
-                                    : 'bg-red-50 text-error'
-                                }`}
-                              >
-                                <span
-                                  className={`w-1.5 h-1.5 rounded-full ${
-                                    activo ? 'bg-emerald-600' : 'bg-error'
-                                  }`}
-                                ></span>
-                                {usuario.estado}
-                              </span>
-                            </td>
-                            <td className="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
-                              {usuario.acciones.map((accion) => (
-                                <button
-                                  className={`px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold transition-colors inline-flex items-center gap-1 cursor-pointer ${clasesTonoAccion[accion.tono]}`}
-                                  key={accion.clave}
-                                  type="button"
-                                  onClick={() =>
-                                    setAviso({
-                                      titulo: `${accion.etiqueta} usuario`,
-                                      descripcion: `Acción «${accion.etiqueta}» ejecutada sobre ${usuario.nombreCompleto}.`,
-                                    })
-                                  }
-                                >
-                                  <span className="material-symbols-outlined text-sm">
-                                    {accion.icono}
-                                  </span>
-                                  {accion.etiqueta}
-                                </button>
-                              ))}
-                            </td>
-                          </tr>
-                        )
-                      })}
+                              <span>Cargando directorio de usuarios...</span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
 
-                      {usuariosFiltrados.length === 0 && (
+                      {!cargandoUsuarios && errorCarga && (
+                        <tr>
+                          <td className="py-10 px-6" colSpan={6}>
+                            <div
+                              className="flex flex-col items-center justify-center gap-3 text-sm text-brand-cinabrio"
+                              role="alert"
+                            >
+                              <span>{errorCarga}</span>
+                              <button
+                                className="px-4 py-2 rounded-xl text-xs font-headline font-semibold text-white bg-brand-cinabrio hover:bg-brand-cinabrio/90 transition-colors cursor-pointer"
+                                type="button"
+                                onClick={cargarUsuarios}
+                              >
+                                Reintentar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+
+                      {!cargandoUsuarios &&
+                        !errorCarga &&
+                        usuariosFiltrados.map((usuario) => {
+                          const estiloEstado =
+                            estilosEstado[usuario.estado] || estilosEstado.INACTIVO
+                          const esCuentaPropia =
+                            idAdministrador !== null &&
+                            Number(usuario.id) === Number(idAdministrador)
+                          const accionesDisponibles = (accionesPorEstado[usuario.estado] || []).filter(
+                            (accion) => !(esCuentaPropia && accion.destructiva),
+                          )
+
+                          return (
+                            <tr
+                              className="hover:bg-surface-container-low/50 transition-colors"
+                              key={usuario.id}
+                            >
+                              <td className="py-4 px-6">
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className={`w-8 h-8 rounded-lg font-headline font-bold flex items-center justify-center text-xs ${clasesTonoAvatar[usuario.tonoAvatar]}`}
+                                  >
+                                    {usuario.iniciales}
+                                  </div>
+                                  <div>
+                                    <p className="font-headline font-semibold text-brand-porcelain">
+                                      {usuario.nombreCompleto}
+                                    </p>
+                                    <p className="text-[10px] text-on-surface-variant font-label">
+                                      ID: {usuario.id}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="py-4 px-4 font-label font-medium text-on-surface">
+                                {usuario.cedula}
+                              </td>
+                              <td className="py-4 px-4 text-on-surface-variant font-label">
+                                {usuario.correo}
+                              </td>
+                              <td className="py-4 px-4">
+                                <span
+                                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium border ${clasesRol[usuario.rol]}`}
+                                >
+                                  {usuario.rol}
+                                </span>
+                              </td>
+                              <td className="py-4 px-4">
+                                <span
+                                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${estiloEstado.contenedor}`}
+                                  data-estado={usuario.estado}
+                                >
+                                  <span
+                                    className={`w-1.5 h-1.5 rounded-full ${estiloEstado.punto}`}
+                                  ></span>
+                                  {usuario.estado}
+                                </span>
+                              </td>
+                              <td className="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+                                {accionesDisponibles.map((accion) => (
+                                  <button
+                                    className={`px-2.5 py-1.5 rounded-lg text-xs font-headline font-semibold transition-colors inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${clasesTonoAccion[accion.tono]}`}
+                                    disabled={usuarioEnProceso === usuario.id}
+                                    key={accion.clave}
+                                    type="button"
+                                    onClick={() =>
+                                      cambiarEstadoUsuario(usuario, accion.estadoDestino)
+                                    }
+                                  >
+                                    <span className="material-symbols-outlined text-sm">
+                                      {accion.icono}
+                                    </span>
+                                    {accion.etiqueta}
+                                  </button>
+                                ))}
+                                {accionesDisponibles.length === 0 && (
+                                  <span className="text-[11px] font-label text-on-surface-variant">
+                                    {esCuentaPropia ? 'Tu cuenta' : 'Sin acciones'}
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          )
+                        })}
+
+                      {!cargandoUsuarios && !errorCarga && usuariosFiltrados.length === 0 && (
                         <tr>
                           <td
                             className="py-10 px-6 text-center text-sm text-on-surface-variant"
@@ -491,11 +828,10 @@ function VistaConsolaAdministrador({ alCerrarSesion, usuarioSesion }) {
                 </div>
                 <div className="px-6 py-3 bg-surface-container/50 border-t border-surface-container-highest/60 flex items-center justify-between text-xs text-on-surface-variant">
                   <span className="font-label text-[11px]">
-                    Mostrando {usuariosFiltrados.length} de {paginacion.total} {paginacion.mensaje}
+                    Mostrando {usuariosFiltrados.length} de {totalUsuarios} cuentas indexadas
                   </span>
                   <span className="font-body text-[11px]">
-                    {paginacion.copiaSeguridad.split(':')[0]}:{' '}
-                    <strong className="font-label">{paginacion.copiaSeguridad.split(':')[1]}</strong>
+                    Origen: <strong className="font-label">MySQL / FastAPI</strong>
                   </span>
                 </div>
               </div>

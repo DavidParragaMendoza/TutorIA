@@ -275,6 +275,12 @@ describe('Servicio de Autenticación y Cliente API HTTP', () => {
       }
 
       vi.spyOn(autenticacionServicio, 'crearUsuario').mockResolvedValueOnce(usuarioCreadoRespuesta)
+      vi.spyOn(autenticacionServicio, 'obtenerUsuarios').mockResolvedValue({
+        total: 0,
+        pagina: 1,
+        tamano: 100,
+        usuarios: [],
+      })
 
       render(
         <VistaConsolaAdministrador
@@ -334,6 +340,12 @@ describe('Servicio de Autenticación y Cliente API HTTP', () => {
       }
 
       vi.spyOn(autenticacionServicio, 'crearUsuario').mockRejectedValueOnce(error409)
+      vi.spyOn(autenticacionServicio, 'obtenerUsuarios').mockResolvedValue({
+        total: 0,
+        pagina: 1,
+        tamano: 100,
+        usuarios: [],
+      })
 
       render(
         <VistaConsolaAdministrador

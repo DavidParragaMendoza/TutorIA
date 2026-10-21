@@ -1,8 +1,11 @@
 """Servicio de administración de usuarios y asignación de roles."""
+from datetime import datetime, timezone
+
 from fastapi import HTTPException, status
 from sqlmodel import Session, func, select
 
 from app.esquemas.usuarioEsquemas import (
+    ActualizacionEstadoUsuarioEsquema,
     RespuestaListaUsuariosEsquema,
     RespuestaUsuarioEsquema,
     UsuarioCreacionEsquema,
@@ -11,6 +14,7 @@ from app.modelos.rol import Rol
 from app.modelos.usuario import Usuario
 from app.modelos.usuarioRol import UsuarioRol
 from app.seguridad.cifrado import obtenerHashContrasena
+from app.servicios.autenticacionServicio import obtenerRolPrincipalUsuario
 
 mensajeDuplicado = "El correo institucional o número de cédula ya se encuentra registrado"
 
@@ -121,4 +125,45 @@ def listarUsuarios(
         pagina=pagina,
         tamano=tamano,
         usuarios=usuariosEsquema,
+    )
+
+
+def actualizarEstadoUsuario(
+    sesionBd: Session,
+    usuarioId: int,
+    datos: ActualizacionEstadoUsuarioEsquema,
+    adminId: int,
+) -> RespuestaUsuarioEsquema:
+    """Actualiza el estado de una cuenta y registra la auditoría administrativa."""
+    usuario = sesionBd.get(Usuario, usuarioId)
+    if usuario is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="El usuario especificado no existe.",
+        )
+
+    if usuario.id == adminId and datos.estado in ("BLOQUEADO", "INACTIVO"):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="El Administrador no puede bloquear ni inhabilitar su propia cuenta en sesión",
+        )
+
+    usuario.estado = datos.estado
+    if datos.estado == "ACTIVO":
+        usuario.intentosFallidos = 0
+    usuario.actualizadoPor = adminId
+    usuario.fechaActualizacion = datetime.now(timezone.utc).replace(tzinfo=None)
+
+    sesionBd.add(usuario)
+    sesionBd.commit()
+    sesionBd.refresh(usuario)
+
+    rolPrincipal = obtenerRolPrincipalUsuario(sesionBd, usuario.id)
+    return RespuestaUsuarioEsquema(
+        id=usuario.id,
+        cedula=usuario.cedula,
+        nombresCompletos=usuario.nombresCompletos,
+        correoInstitucional=usuario.correoInstitucional,
+        rolPrincipal=rolPrincipal,
+        estado=usuario.estado,
     )

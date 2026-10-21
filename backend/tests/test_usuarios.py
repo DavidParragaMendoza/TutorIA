@@ -152,3 +152,214 @@ def test_listadoPaginado(cliente):
     assert len(segunda["usuarios"]) == 1
     idsPrimera = {usuario["id"] for usuario in primera["usuarios"]}
     assert segunda["usuarios"][0]["id"] not in idsPrimera
+
+
+mensajeAutobloqueo = "El Administrador no puede bloquear ni inhabilitar su propia cuenta en sesión"
+
+
+def crearUsuarioDocente(cliente):
+    respuesta = cliente.post(rutaUsuarios, json=datosNuevoUsuario, headers=cabeceraAdmin(cliente))
+    return respuesta.json()["id"]
+
+
+def establecerEstadoUsuario(motorPrueba, usuarioId, estado, intentosFallidos=0):
+    with Session(motorPrueba) as sesion:
+        usuario = sesion.get(Usuario, usuarioId)
+        usuario.estado = estado
+        usuario.intentosFallidos = intentosFallidos
+        sesion.add(usuario)
+        sesion.commit()
+
+
+def obtenerDatosUsuario(motorPrueba, usuarioId):
+    with Session(motorPrueba) as sesion:
+        usuario = sesion.get(Usuario, usuarioId)
+        return {
+            "estado": usuario.estado,
+            "intentosFallidos": usuario.intentosFallidos,
+            "actualizadoPor": usuario.actualizadoPor,
+            "fechaActualizacion": usuario.fechaActualizacion,
+        }
+
+
+def obtenerAdminId(motorPrueba):
+    with Session(motorPrueba) as sesion:
+        admin = sesion.exec(
+            select(Usuario).where(Usuario.correoInstitucional == "admin@tutoria.edu.ec")
+        ).one()
+        return admin.id
+
+
+def test_adminDesbloqueaUsuarioYReiniciaIntentos(cliente, motorPrueba):
+    usuarioId = crearUsuarioDocente(cliente)
+    establecerEstadoUsuario(motorPrueba, usuarioId, "BLOQUEADO", 3)
+    adminId = obtenerAdminId(motorPrueba)
+
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "ACTIVO"},
+        headers=cabeceraAdmin(cliente),
+    )
+
+    assert respuesta.status_code == 200
+    cuerpo = respuesta.json()
+    assert cuerpo["id"] == usuarioId
+    assert cuerpo["estado"] == "ACTIVO"
+    assert cuerpo["rolPrincipal"] == "DOCENTE"
+    assert "passwordHash" not in respuesta.text
+    datos = obtenerDatosUsuario(motorPrueba, usuarioId)
+    assert datos["estado"] == "ACTIVO"
+    assert datos["intentosFallidos"] == 0
+    assert datos["actualizadoPor"] == adminId
+    assert datos["fechaActualizacion"] is not None
+
+
+def test_adminBloqueaUsuario(cliente, motorPrueba):
+    usuarioId = crearUsuarioDocente(cliente)
+    adminId = obtenerAdminId(motorPrueba)
+
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "BLOQUEADO"},
+        headers=cabeceraAdmin(cliente),
+    )
+
+    assert respuesta.status_code == 200
+    assert respuesta.json()["estado"] == "BLOQUEADO"
+    datos = obtenerDatosUsuario(motorPrueba, usuarioId)
+    assert datos["estado"] == "BLOQUEADO"
+    assert datos["intentosFallidos"] == 0
+    assert datos["actualizadoPor"] == adminId
+    assert datos["fechaActualizacion"] is not None
+
+
+def test_adminInactivaYActivaUsuario(cliente, motorPrueba):
+    usuarioId = crearUsuarioDocente(cliente)
+    establecerEstadoUsuario(motorPrueba, usuarioId, "BLOQUEADO", 2)
+    cabecera = cabeceraAdmin(cliente)
+
+    respuestaInactivo = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "INACTIVO"},
+        headers=cabecera,
+    )
+    assert respuestaInactivo.status_code == 200
+    assert respuestaInactivo.json()["estado"] == "INACTIVO"
+    assert obtenerDatosUsuario(motorPrueba, usuarioId)["intentosFallidos"] == 2
+
+    respuestaActivo = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "ACTIVO"},
+        headers=cabecera,
+    )
+    assert respuestaActivo.status_code == 200
+    datos = obtenerDatosUsuario(motorPrueba, usuarioId)
+    assert datos["estado"] == "ACTIVO"
+    assert datos["intentosFallidos"] == 0
+
+
+def test_adminNoPuedeBloquearse409(cliente, motorPrueba):
+    adminId = obtenerAdminId(motorPrueba)
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{adminId}/estado",
+        json={"estado": "BLOQUEADO"},
+        headers=cabeceraAdmin(cliente),
+    )
+
+    assert respuesta.status_code == 409
+    assert respuesta.json()["detail"] == mensajeAutobloqueo
+    assert obtenerDatosUsuario(motorPrueba, adminId)["estado"] == "ACTIVO"
+
+
+def test_adminNoPuedeAutoinactivarse409(cliente, motorPrueba):
+    adminId = obtenerAdminId(motorPrueba)
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{adminId}/estado",
+        json={"estado": "INACTIVO"},
+        headers=cabeceraAdmin(cliente),
+    )
+
+    assert respuesta.status_code == 409
+    assert respuesta.json()["detail"] == mensajeAutobloqueo
+    assert obtenerDatosUsuario(motorPrueba, adminId)["estado"] == "ACTIVO"
+
+
+def test_cambioEstadoUsuarioInexistente404(cliente):
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/9999/estado",
+        json={"estado": "ACTIVO"},
+        headers=cabeceraAdmin(cliente),
+    )
+    assert respuesta.status_code == 404
+
+
+def test_cambioEstadoInvalido422(cliente):
+    usuarioId = crearUsuarioDocente(cliente)
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "SUSPENDIDO"},
+        headers=cabeceraAdmin(cliente),
+    )
+    assert respuesta.status_code == 422
+
+
+def test_docenteNoPuedeCambiarEstado403(cliente):
+    usuarioId = crearUsuarioDocente(cliente)
+    cabecera = obtenerCabecera(cliente, "docente@tutoria.edu.ec", "Docente123*")
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "ACTIVO"},
+        headers=cabecera,
+    )
+    assert respuesta.status_code == 403
+
+
+def test_estudianteNoPuedeCambiarEstado403(cliente):
+    usuarioId = crearUsuarioDocente(cliente)
+    cabecera = obtenerCabecera(cliente, "estudiante@tutoria.edu.ec", "Estudiante123*")
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "ACTIVO"},
+        headers=cabecera,
+    )
+    assert respuesta.status_code == 403
+
+
+def test_cambioEstadoSinToken401(cliente):
+    usuarioId = crearUsuarioDocente(cliente)
+    respuesta = cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "ACTIVO"},
+    )
+    assert respuesta.status_code == 401
+
+
+def test_listadoIncluyeUsuarioRecienCreado(cliente):
+    usuarioCreado = cliente.post(
+        rutaUsuarios, json=datosNuevoUsuario, headers=cabeceraAdmin(cliente)
+    ).json()
+
+    respuesta = cliente.get(rutaUsuarios, headers=cabeceraAdmin(cliente))
+
+    assert respuesta.status_code == 200
+    cuerpo = respuesta.json()
+    assert cuerpo["total"] == 4
+    assert any(usuario["id"] == usuarioCreado["id"] for usuario in cuerpo["usuarios"])
+
+
+def test_listadoReflejaEstadoActualizado(cliente):
+    usuarioId = crearUsuarioDocente(cliente)
+    cabecera = cabeceraAdmin(cliente)
+    cliente.patch(
+        f"{rutaUsuarios}/{usuarioId}/estado",
+        json={"estado": "BLOQUEADO"},
+        headers=cabecera,
+    )
+
+    respuesta = cliente.get(rutaUsuarios, headers=cabecera)
+
+    assert respuesta.status_code == 200
+    usuario = next(
+        usuario for usuario in respuesta.json()["usuarios"] if usuario["id"] == usuarioId
+    )
+    assert usuario["estado"] == "BLOQUEADO"

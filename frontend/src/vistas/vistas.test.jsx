@@ -1,10 +1,9 @@
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { render, cleanup } from '@testing-library/react'
-import usuariosAuthMock from '../datosSimulados/usuariosAuthMock.json'
+import * as autenticacionServicio from '../servicios/autenticacionServicio.js'
 import rutaAprendizajeMock from '../datosSimulados/rutaAprendizajeMock.json'
 import chatVocabularioMock from '../datosSimulados/chatVocabularioMock.json'
 import estudiantesDocenteMock from '../datosSimulados/estudiantesDocenteMock.json'
-import usuariosAdminMock from '../datosSimulados/usuariosAdminMock.json'
 import VistaAutenticacion from './VistaAutenticacion.jsx'
 import VistaRecuperacionCredenciales from './VistaRecuperacionCredenciales.jsx'
 import VistaRutaAprendizaje from './VistaRutaAprendizaje.jsx'
@@ -13,14 +12,34 @@ import VistaTableroDocente from './VistaTableroDocente.jsx'
 import VistaConsolaAdministrador from './VistaConsolaAdministrador.jsx'
 
 const funcionVacia = () => {}
-const buscarUsuario = (rol) => usuariosAuthMock.usuarios.find((usuario) => usuario.rol === rol)
+const usuariosSesion = {
+  Estudiante: {
+    id: 3,
+    nombresCompletos: 'Estudiante TutorIA',
+    correoInstitucional: 'estudiante@tutoria.edu.ec',
+    rolPrincipal: 'ESTUDIANTE',
+  },
+  Docente: {
+    id: 2,
+    nombresCompletos: 'Docente TutorIA',
+    correoInstitucional: 'docente@tutoria.edu.ec',
+    rolPrincipal: 'DOCENTE',
+  },
+  Administrador: {
+    id: 1,
+    nombresCompletos: 'Administrador TutorIA',
+    correoInstitucional: 'admin@tutoria.edu.ec',
+    rolPrincipal: 'ADMINISTRADOR',
+  },
+}
+const buscarUsuario = (rol) => usuariosSesion[rol]
 
 afterEach(() => cleanup())
 
-describe('Mocks JSON', () => {
+describe('Mocks JSON pedagógicos', () => {
   it('cargan con contenido válido', () => {
-    ;[usuariosAuthMock, rutaAprendizajeMock, chatVocabularioMock, estudiantesDocenteMock, usuariosAdminMock].forEach(
-      (mock) => expect(Object.keys(mock).length).toBeGreaterThan(0),
+    ;[rutaAprendizajeMock, chatVocabularioMock, estudiantesDocenteMock].forEach((mock) =>
+      expect(Object.keys(mock).length).toBeGreaterThan(0),
     )
   })
 })
@@ -68,6 +87,12 @@ describe('Vistas', () => {
   })
 
   it('renderiza VistaConsolaAdministrador', () => {
+    vi.spyOn(autenticacionServicio, 'obtenerUsuarios').mockResolvedValue({
+      total: 0,
+      pagina: 1,
+      tamano: 100,
+      usuarios: [],
+    })
     const { container } = render(
       <VistaConsolaAdministrador alCerrarSesion={funcionVacia} usuarioSesion={buscarUsuario('Administrador')} />,
     )

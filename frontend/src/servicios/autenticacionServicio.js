@@ -69,6 +69,29 @@ export async function crearUsuario(datosUsuario) {
 }
 
 /**
+ * Obtiene el directorio paginado de usuarios desde MySQL (Exclusivo para ADMINISTRADOR).
+ * @param {object} opciones - { pagina, tamano, rol }
+ * @returns {Promise<object>} Respuesta paginada con total, pagina, tamano y usuarios
+ */
+export async function obtenerUsuarios({ pagina = 1, tamano = 100, rol } = {}) {
+  const parametros = { pagina, tamano }
+  if (rol) parametros.rol = rol
+  const respuesta = await clienteApi.get('/api/v1/users', { params: parametros })
+  return respuesta.data
+}
+
+/**
+ * Actualiza el estado de un usuario (Exclusivo para ADMINISTRADOR).
+ * @param {number} usuarioId - Identificador del usuario
+ * @param {string} estado - ACTIVO, BLOQUEADO o INACTIVO
+ * @returns {Promise<object>} Usuario actualizado
+ */
+export async function actualizarEstadoUsuario(usuarioId, estado) {
+  const respuesta = await clienteApi.patch(`/api/v1/users/${usuarioId}/estado`, { estado })
+  return respuesta.data
+}
+
+/**
  * Obtiene el token JWT actualmente almacenado en localStorage.
  * @returns {string|null}
  */
