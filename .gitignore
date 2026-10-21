@@ -8,9 +8,13 @@ venv/
 # Cachés de Python
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.coverage
 
 # Dependencias del frontend
 node_modules/
+frontend/node_modules/
 
 # Artefactos de compilación del frontend
 dist/
+frontend/dist/

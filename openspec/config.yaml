@@ -1,0 +1,112 @@
+schema: spec-driven
+version: "1.0"
+project: tutoria-mvp
+
+## Directorio base principal de ejecución de comandos
+working_dir: .
+
+## Contexto del Proyecto
+context: |
+  Tech Stack: FastAPI (Python 3.12/3.14) + SQLModel (ORM sobre MySQL 8.0) + Pytest en Backend; React 18/19 + Vite + Tailwind CSS + Vitest + Oxlint en Frontend; AnythingLLM en Docker local (RAG y Embeddings).
+  Architecture: Arquitectura desacoplada de 3 capas (Presentación en /frontend, Negocio y Orquestación en /backend, Persistencia en /database).
+  Convenciones: Todo el código (variables, métodos, clases, funciones y comentarios) y claves JSON de la API en camelCase estricto. Idioma español uniforme en UI, logs y explicaciones.
+  Privacidad & LOPDP: Seudonimización irreversible mediante SHA-256 + sal antes de enviar identificadores al contenedor AnythingLLM. Jamás enviar nombres o PII a la IA.
+  Límites Innegociables: Prohibido incluir componentes 3D, reconocimiento de voz (Whisper) o trazado de caracteres Hanzi en este MVP. Enfoque exclusivo en vocabulario HSK1/A1 con chat cerrado de opción múltiple.
+  Testing: Backend con Pytest (132 tests pasando); Frontend con Vitest (44 tests pasando); Linter frontend con Oxlint (0 errores).
+
+## Testing & Quality
+testing:
+  strict_tdd: true
+  runner:
+    available: true
+    backend:
+      framework: Pytest
+      runner: pytest
+      command: pytest
+      baseline: 132 pruebas verdes (test_auth, test_cifrado, test_esquemas, test_jwt, test_lopdp, test_modelos, test_semillas, test_usuarios)
+    frontend:
+      framework: Vitest
+      runner: vitest
+      setup: frontend/src/tests/
+      command: npm --prefix frontend test
+      baseline: 44 pruebas verdes (vistas, enrutamiento, autenticacion, consolaAdministrador)
+    conventions:
+      - Idioma español y sintaxis camelCase en suites y aserciones.
+      - Pruebas backend en backend/tests/ y frontend en frontend/src/tests/ o colocaladas.
+      - Validación de contratos y respuestas JSON en camelCase.
+  layers:
+    unit:
+      available: true
+    integration:
+      available: true
+      note: Pruebas de base de datos con SQLite en memoria / MySQL y mocks para AnythingLLM.
+    e2e:
+      available: false
+      note: Pruebas de integración visual manuales en navegador y pruebas de humo HTTP.
+  quality:
+    linter:
+      available: true
+      frontend:
+        tool: Oxlint
+        command: npm --prefix frontend run lint
+        estado: verificado, 0 errores, 0 warnings
+      backend:
+        tool: Flake8 / Ruff
+        command: python -m pytest --collect-only
+        estado: verificado, sintaxis limpia
+    type_checker:
+      tool: Pydantic / SQLModel y Vite
+      command: npm --prefix frontend run build
+    formatter:
+      available: true
+      frontend:
+        tool: Prettier / ESLint
+        command: npm --prefix frontend run build
+      backend:
+        tool: Black / PEP8
+        command: python -c "import app.main; print('Sintaxis OK')"
+
+## Reglas SDD (Spec Driven Development)
+rules:
+  proposal:
+    - Incluir cambios de esquema relacional (Tablas SQLModel en MySQL).
+    - Definir roles y permisos RBAC afectados (Estudiante, Docente, Administrador).
+    - Identificar servicios del backend y componentes de React involucrados.
+    - Cumplir el principio de seudonimización LOPDP (SHA-256).
+  specs:
+    - Usar notación EARS en español (Ubicuo, Evento, Estado, Opcional, No deseado).
+    - Escenarios en formato Gherkin (Dado, Cuando, Entonces).
+    - Formato delta OpenSpec obligatorio:
+      - Encabezado `## ADDED Requirements` o `## MODIFIED Requirements`
+      - `### Requirement:` para cada requerimiento
+      - `#### Scenario:` para cada escenario
+      - Archivo en `openspec/changes/<change-id>/specs/<capability>/spec.md`
+  design:
+    - Respetar la arquitectura de 3 capas (/frontend, /backend, /database).
+    - Documentar modelos de datos SQLModel con campos en camelCase.
+    - Definir contratos REST con endpoints /api/v1/... y respuestas JSON en camelCase.
+    - Garantizar gobernanza pedagógica: subordinar respuestas de AnythingLLM a reglas de FastAPI.
+    - Especificar modo defensivo / contingencia si AnythingLLM supera 3.0s de timeout.
+  tasks:
+    - Cambio a nivel de historia o feature en `openspec/changes/<change-id>/`.
+    - Fases verticales ordenadas: (1) Modelo SQLModel, (2) Lógica y servicio FastAPI, (3) Endpoint API REST, (4) Servicio y componentes React, (5) Pruebas automatizadas.
+    - Cada tarea debe tener su criterio de verificación explícito.
+    - Mantener tareas atómicas y ejecutables.
+  apply:
+    - Respetar el estilo camelCase estricto en Python y JavaScript/React.
+    - No inventar tablas en SQL directo: definirlas como clases SQLModel en Python.
+    - Ejecutar pruebas intermedias (`pytest` y `npm test`).
+  verify:
+    - Ejecutar compilación y pruebas:
+      - Backend: `pytest`
+      - Frontend: `npm --prefix frontend test && npm --prefix frontend run build`
+    - Una historia con pruebas rojas no se aprueba bajo ninguna circunstancia.
+    - Verificar que ningún identificador real llegue al contenedor AnythingLLM.
+
+## Integración Continua (CI/CD)
+ci:
+  commands:
+    - pytest
+    - npm --prefix frontend test
+    - npm --prefix frontend run lint
+    - npm --prefix frontend run build
